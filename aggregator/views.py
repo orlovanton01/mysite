@@ -1,9 +1,8 @@
 from django.shortcuts import render
 
-# Create your views here.
-
-from django.http import HttpResponse
-
+from .models import Course
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    latest_courses_list=Course.objects.all()
+    context = {"latest_courses_list": latest_courses_list}
+    return render(request, "aggregator/index.html", context)
