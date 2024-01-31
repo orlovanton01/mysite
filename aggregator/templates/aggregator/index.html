@@ -28,10 +28,10 @@
                 </ul>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Сравнение</a>
+                <a class="nav-link active" aria-current="page" href="#">Сравнение</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Избранное</a>
+                <a class="nav-link active" aria-current="page" href="#">Избранное</a>
               </li>
             </ul>
             <form class="d-flex" role="search">
@@ -51,6 +51,7 @@
                 {{course.price}} ₽<br>
                 {{course.final_rating}}<br>
                 <a href='{{course.link}}'>{{course.link}}</a><br>
+                {{course.pub_date}}<br>
               </li>
             </p>
           {% endfor %}
