@@ -8,7 +8,7 @@ class Course(models.Model):
     price=models.FloatField(null=True)
     final_rating=models.DecimalField(decimal_places=1, max_digits=2, null=True)
     link=models.TextField(null=True)
-    pub_date=models.DateField(null=True)
+    training_period=models.IntegerField(null=True)
 
 class User(models.Model):
     last_name=models.CharField(max_length=50)
