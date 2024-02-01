@@ -1,2 +1,6 @@
 **/__pycache__
 __pycache__/
+**/migrations
+!important __init__.py
+**/migrations
+!important 0001_initial.py
