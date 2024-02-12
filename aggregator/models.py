@@ -5,10 +5,10 @@ from django.db import models
 class Course(models.Model):
     owner=models.CharField(max_length=50)
     course_name=models.CharField(max_length=50)
-    price=models.FloatField(null=True)
-    final_rating=models.DecimalField(decimal_places=1, max_digits=2, null=True)
-    link=models.TextField(null=True)
-    training_period=models.IntegerField(null=True)
+    price=models.DecimalField(decimal_places=2, max_digits=6, default=0)
+    final_rating=models.DecimalField(decimal_places=1, max_digits=2, null=True, verbose_name='Рейтинг курса')
+    link=models.TextField(default='')
+    training_period=models.IntegerField(default=0)
 
 class User(models.Model):
     last_name=models.CharField(max_length=50)
@@ -18,8 +18,8 @@ class User(models.Model):
     password=models.CharField(max_length=80)
 
 class Review(models.Model):
-    text_review=models.TextField(null=True)
-    rating=models.IntegerField(null=True)
+    text_review=models.TextField(default='')
+    rating=models.DecimalField(decimal_places=1, max_digits=2, null=True, verbose_name='Рейтинг человека')
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     course=models.ForeignKey(Course, on_delete=models.CASCADE)
 
