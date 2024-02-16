@@ -13,6 +13,9 @@ class Course(models.Model):
     link=models.TextField(null=True)
     training_period=models.IntegerField(null=True)
 
+    def __str__(self):
+        return self.course_name
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     last_name=models.CharField(max_length=50)
