@@ -16,8 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from aggregator import views
 
 urlpatterns = [
     path("aggregator/", include("aggregator.urls")),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls)
 ]

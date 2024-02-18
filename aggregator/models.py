@@ -4,7 +4,7 @@ from django.db import models
 
 class Course(models.Model):
     owner=models.CharField(max_length=50)
-    course_name=models.CharField(max_length=50)
+    course_name=models.CharField(max_length=150)
     price=models.FloatField(null=True)
     final_rating=models.DecimalField(decimal_places=1, max_digits=2, null=True)
     link=models.TextField(null=True)
