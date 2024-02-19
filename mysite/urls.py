@@ -19,6 +19,6 @@ from django.urls import include, path
 from aggregator import views
 
 urlpatterns = [
-    path("aggregator/", include("aggregator.urls")),
+    path("", include("aggregator.urls")),
     path('admin/', admin.site.urls)
 ]
