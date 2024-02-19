@@ -9,10 +9,10 @@ from django.core.exceptions import ObjectDoesNotExist
 class Course(models.Model):
     owner=models.CharField(max_length=50)
     course_name=models.CharField(max_length=150)
-    price=models.FloatField(null=True)
+    price=models.DecimalField(decimal_places=2, max_digits=8, default=0)
     final_rating=models.DecimalField(decimal_places=1, max_digits=2, null=True, verbose_name='Рейтинг курса')
-    link=models.TextField(null=True)
-    training_period=models.IntegerField(null=True)
+    link=models.TextField(default='')
+    training_period=models.IntegerField(default=0)
 
     def __str__(self):
         return self.course_name
