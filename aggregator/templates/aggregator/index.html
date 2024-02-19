@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Агрегатор курсов</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   </head>
   <body>
@@ -42,9 +42,18 @@
         </div>
       </nav>
       {% if latest_courses_list %}
-        <ol>
+        {% comment %} <ol> {% endcomment %}
           {% for course in latest_courses_list %}
-            <p>
+          <div class="card" style="width: 18rem;">
+            <img src="" class="card-img-top" alt="Логотип школы">
+            <div class="card-body">
+              <h5 class="card-title">{{course.course_name}}<br></h5>
+              <p class="card-text">{{course.price}} ₽</p>
+              <p class="card-text">{{course.training_period}} месяцев</p>
+              <a href='{{course.link}}' class="btn btn-primary">Перейти на сайт</a>
+            </div>
+          </div>
+            {% comment %} <p>
               <li>
                 {{course.owner}}<br>
                 {{course.course_name}}<br>
@@ -53,9 +62,9 @@
                 <a href='{{course.link}}'>{{course.link}}</a><br>
                 {{course.training_period}} месяцев<br>
               </li>
-            </p>
+            </p> {% endcomment %}
           {% endfor %}
-        </ol>
+        {% comment %} </ol> {% endcomment %}
       {% else %}
         <p>No courses are available.</p>
       {% endif %}
