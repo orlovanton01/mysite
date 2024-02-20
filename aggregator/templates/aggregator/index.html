@@ -46,22 +46,21 @@
         <div class="d-flex flex-row flex-wrap justify-content-evenly align-items-baseline">
           {% for course in latest_courses_list %}
           <div class="card h-100" style="width: 18rem;">
-            {% comment %} {% if course.owner=='skillbox'%}
+            {% if course.owner == 'skillbox'%}
               <img src="\static\admin\img\Skillbox_logo.svg" class="card-img-top" alt="Логотип школы">
-            {%else%} {% endcomment %}
-            <img src="" class="card-img-top" alt="Логотип школы">
-            {% comment %} {%endif%} {% endcomment %}
+            {% else %}
+              <img src="" class="card-img-top" alt="Логотип школы">
+            {% endif %}
             <div class="card-body">
               <h5 class="card-title">{{course.course_name}}<br></h5>
               <p class="card-text">{{course.price}} ₽</p>
-              {% comment %} {% if course.training_period%10==1 %}
-                <p class="card-text">{{course.training_period}} месяц</p>
-              {% elif course.training_period%10==2 or course.training_period%10==3 course.training_period%10==4 %}
-                <p class="card-text">{{course.training_period}} месяца</p>
-              {% else %}
+              {% if course.training_period > 10 and course.training_period < 20 or course.training_period > 4 and course.training_period < 10 or course.training_period|get_digit:1 == 0%}
                 <p class="card-text">{{course.training_period}} месяцев</p>
-              {% endif %} {% endcomment %}
-              <p class="card-text">{{course.training_period}} месяцев</p>
+              {% elif course.training_period|get_digit:1 == 1 %}
+                <p class="card-text">{{course.training_period}} месяц</p>
+              {% else %}
+                <p class="card-text">{{course.training_period}} месяца</p>
+              {% endif %}
               <a href='{{course.link}}' class="btn btn-primary">Перейти на сайт</a>
             </div>
           </div>
