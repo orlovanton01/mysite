@@ -3,11 +3,14 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
+from os import path
+from django.conf import settings
 
 # Create your models here.
 
 class Course(models.Model):
     owner=models.CharField(max_length=50)
+    owner_img=models.ImageField()
     course_name=models.CharField(max_length=150)
     price=models.DecimalField(decimal_places=2, max_digits=8, default=0)
     final_rating=models.DecimalField(decimal_places=1, max_digits=2, null=True, verbose_name='Рейтинг курса')
@@ -16,6 +19,14 @@ class Course(models.Model):
 
     def __str__(self):
         return self.course_name
+    
+    def save(self, *args, **kwargs):
+        file_name = self.owner + '.png'
+        if path.exists(path.join(settings.MEDIA_ROOT, file_name)):
+            self.owner_img.name = file_name
+        else:
+            self.owner_img.name = 'default.png'
+        super(Course, self).save(*args, **kwargs)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

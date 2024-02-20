@@ -46,11 +46,7 @@
         <div class="d-flex flex-row flex-wrap justify-content-evenly align-items-baseline">
           {% for course in latest_courses_list %}
           <div class="card h-100" style="width: 18rem;">
-            {% if course.owner == 'skillbox'%}
-              <img src="\static\admin\img\Skillbox_logo.svg" class="card-img-top" alt="Логотип школы">
-            {% else %}
-              <img src="" class="card-img-top" alt="Логотип школы">
-            {% endif %}
+            <img src="{{course.owner_img.url}}" class="card-img-top" alt="Логотип школы">
             <div class="card-body">
               <h5 class="card-title">{{course.course_name}}<br></h5>
               <p class="card-text">{{course.price}} ₽</p>
