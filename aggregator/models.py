@@ -10,7 +10,7 @@ from django.conf import settings
 
 class Course(models.Model):
     owner=models.CharField(max_length=50)
-    owner_img=models.ImageField()
+    owner_img=models.ImageField(default='default.png')
     course_name=models.CharField(max_length=150)
     price=models.DecimalField(decimal_places=2, max_digits=8, default=0)
     final_rating=models.DecimalField(decimal_places=1, max_digits=2, null=True, verbose_name='Рейтинг курса')
@@ -20,13 +20,13 @@ class Course(models.Model):
     def __str__(self):
         return self.course_name
     
-    def save(self, *args, **kwargs):
+    def get_course_img_url(self):
         file_name = self.owner + '.png'
         if path.exists(path.join(settings.MEDIA_ROOT, file_name)):
             self.owner_img.name = file_name
         else:
             self.owner_img.name = 'default.png'
-        super(Course, self).save(*args, **kwargs)
+        return self.owner_img.url
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
