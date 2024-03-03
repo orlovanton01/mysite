@@ -8,7 +8,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
+        <div class="container">
           <a class="navbar-brand" href="#">Агрегатор</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
             <span class="navbar-toggler-icon"></span>
@@ -19,7 +19,7 @@
                 <a class="nav-link active" aria-current="page" href="#">Главная</a>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Войти
                 </a>
                 <ul class="dropdown-menu">
@@ -43,37 +43,59 @@
       </nav>
       {% if latest_courses_list %}
         {% comment %} <ol> {% endcomment %}
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            {% for course in latest_courses_list %}
-            <div class="col">
-              <div class="card h-100" style="width: 18rem; ">
-                <img src="{{course.get_course_img_url}}" class="card-img-top" alt="Логотип школы">
-                <div class="card-body">
-                  <h5 class="card-title">{{course.course_name}}<br></h5>
-                  <p class="card-text">{{course.price}} ₽</p>
-                  {% if course.training_period > 10 and course.training_period < 20 or course.training_period > 4 and course.training_period < 10 or course.training_period|get_digit:1 == 0%}
-                    <p class="card-text">{{course.training_period}} месяцев</p>
-                  {% elif course.training_period|get_digit:1 == 1 %}
-                    <p class="card-text">{{course.training_period}} месяц</p>
-                  {% else %}
-                    <p class="card-text">{{course.training_period}} месяца</p>
-                  {% endif %}
-                  <a href='{{course.link}}' class="btn btn-primary">Перейти на сайт</a>
-                </div>
+        <div class="row container">
+          <form class="col-3">
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Цена</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="От">
+                <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="До">
               </div>
             </div>
-            {% comment %} <p>
-              <li>
-                {{course.owner}}<br>
-                {{course.course_name}}<br>
-                {{course.price}} ₽<br>
-                {{course.final_rating}}<br>
-                <a href='{{course.link}}'>{{course.link}}</a><br>
-                {{course.training_period}} месяцев<br>
-              </li>
-            </p> {% endcomment %}
-          {% endfor %}
+            <div class="mb-3">
+              <label for="exampleFormControlInput2" class="form-label">Продолжительность обучения</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="exampleFormControlInput2" aria-describedby="basic-addon2">
+                <span class="input-group-text" id="basic-addon2">мес.</span>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success">Применить</button>
+            <button type="submit" class="btn btn-danger">Сбросить</button>
+          </form>
+          <div class="col-9">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for course in latest_courses_list %}
+                <div class="col">
+                  <div class="card h-100" style="width: 18rem; ">
+                    <img src="{{course.get_course_img_url}}" class="card-img-top" alt="Логотип школы">
+                    <div class="card-body">
+                      <h5 class="card-title">{{course.course_name}}<br></h5>
+                      <h5 class="card-title">{{course.price}} ₽<br></h5>
+                      {% if course.training_period > 10 and course.training_period < 20 or course.training_period > 4 and course.training_period < 10 or course.training_period|get_digit:1 == 0%}
+                        <p class="card-text">{{course.training_period}} месяцев</p>
+                      {% elif course.training_period|get_digit:1 == 1 %}
+                        <p class="card-text">{{course.training_period}} месяц</p>
+                      {% else %}
+                        <p class="card-text">{{course.training_period}} месяца</p>
+                      {% endif %}
+                      <a href='{{course.link}}' class="btn btn-primary">Перейти на сайт</a>
+                    </div>
+                  </div>
+                </div>
+              {% comment %} <p>
+                <li>
+                  {{course.owner}}<br>
+                  {{course.course_name}}<br>
+                  {{course.price}} ₽<br>
+                  {{course.final_rating}}<br>
+                  <a href='{{course.link}}'>{{course.link}}</a><br>
+                  {{course.training_period}} месяцев<br>
+                </li>
+              </p> {% endcomment %}
+            {% endfor %}
+          </div>
         </div>
+      </div>
         {% comment %} </ol> {% endcomment %}
       {% else %}
         <p>No courses are available.</p>
