@@ -45,22 +45,24 @@
         {% comment %} <ol> {% endcomment %}
         <div class="row container">
           <form class="col-3">
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Цена</label>
-              <div class="input-group">
-                <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="От">
-                <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="До">
+            <div style="position: sticky; top: 0;">
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Цена</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="От, ₽">
+                  <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="До, ₽">
+                </div>
               </div>
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput2" class="form-label">Продолжительность обучения</label>
-              <div class="input-group">
-                <input type="number" class="form-control" id="exampleFormControlInput2" aria-describedby="basic-addon2">
-                <span class="input-group-text" id="basic-addon2">мес.</span>
+              <div class="mb-3">
+                <label for="exampleFormControlInput2" class="form-label">Продолжительность обучения</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="От, мес.">
+                  <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="До, мес.">
+                </div>
               </div>
+              <button type="submit" class="btn btn-success">Применить</button>
+              <button type="submit" class="btn btn-danger">Сбросить</button>
             </div>
-            <button type="submit" class="btn btn-success">Применить</button>
-            <button type="submit" class="btn btn-danger">Сбросить</button>
           </form>
           <div class="col-9">
             <div class="row row-cols-1 row-cols-md-3 g-4">
