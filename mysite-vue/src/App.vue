@@ -7,7 +7,7 @@ import {Course} from "@/api.js"
 const search = ref("")
 const data =ref([])
   async function getData(){
-      data.value   = await Course.objects.filter({name:search.value})
+      data.value   = await Course.objects.filter({course_name:search.value})
   }
   onMounted(()=>getData())
 </script>
@@ -53,4 +53,5 @@ const data =ref([])
 </template>
 
 <style scoped>
+
 </style>

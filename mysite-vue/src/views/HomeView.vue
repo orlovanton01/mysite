@@ -5,8 +5,9 @@
 
   const data =ref([])
     async function getData(){
-        data.value   = await Course.objects.all()
+        data.value   = await Course.objects.filter()
     }
+    onMounted(()=>getData())
 </script>
 
 <template>
@@ -45,22 +46,29 @@
           <button type="submit" class="btn btn-danger">Сбросить</button>
         </div>
       </form>
-      <div class="col-9">
-        <div class="row row-cols-1 row-cols-md-3 g-4" v-for="course in data">
-            <div class="col">
+      <div class="col-9" v-if="data">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" v-for="course in data">
               <div class="card h-100" style="width: 18rem; ">
                 <img src="" class="card-img-top" alt="Логотип школы">
                 <!-- <img src="{{course.get_course_img_url}}" class="card-img-top" alt="Логотип школы"> -->
                 <div class="card-body">
                   <h5 class="card-title">{{course.course_name}}<br></h5>
-                  <h5 class="card-title"> ₽<br></h5>
+                  <h5 class="card-title">{{course.price}} ₽<br></h5>
                   <p class="card-text">{{course.training_period}} мес.</p>
                   <a href='{{course.link}}' class="btn btn-primary">Перейти на сайт</a>
                 </div>
               </div>
             </div>
-      </div>
-      <!-- <p>No courses are available.</p> -->
+      </div v-else>
+      <p>No courses are available.</p>
     </div>
   </div>
 </template>
+
+<style>
+  .sticky{
+      position: sticky; 
+      top: 0;
+  }
+</style>
