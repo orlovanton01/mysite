@@ -52,6 +52,8 @@ const data =ref([])
   </div>
 </template>
 
-<style scoped>
-
+<style>
+*{
+  font-size:14px;
+}
 </style>
