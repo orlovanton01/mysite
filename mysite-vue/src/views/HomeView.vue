@@ -50,8 +50,7 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <div class="col" v-for="course in data">
               <div class="card h-100" style="width: 18rem; ">
-                <img src="" class="card-img-top" alt="Логотип школы">
-                <!-- <img src="{{course.get_course_img_url}}" class="card-img-top" alt="Логотип школы"> -->
+                <img :src="course.get_course_img_url" class="card-img-top" alt="Логотип школы">
                 <div class="card-body">
                   <h5 class="card-title">{{course.course_name}}<br></h5>
                   <h5 class="card-title">{{course.price}} ₽<br></h5>

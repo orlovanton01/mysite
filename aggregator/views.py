@@ -13,6 +13,7 @@ class CourseFilter(django_filters.FilterSet):
         exclude ="owner_img"
 
 class CourseSerializer(serializers.ModelSerializer):
+    get_course_img_url = serializers.CharField(read_only=True)
     class Meta:
         model = Course
         fields = "__all__"
