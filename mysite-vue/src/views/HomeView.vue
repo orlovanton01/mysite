@@ -1,22 +1,24 @@
 <script setup>
   import { RouterLink, RouterView } from 'vue-router'
-  import { ref,onMounted} from "vue"
+  import { ref,onMounted,watch} from "vue"
   import {Course} from "@/api.js"
 
+  const props =defineProps(['search'])
+  console.log(props.search)
   const ordering = ref('')
   const data =ref([])
 
-    async function getData(){
-      let filter ={ordering:'course_name'}
-      data.value   = await Course.objects.filter(filter)
-    }
-    
-    // function setOrdering(name){
-    //   ordering.value=name
-    // }
-    onMounted(()=>getData())
-    // onMounted(()=>setOrdering('course_name'))
-    // watch(()=>props.search,()=>getData())
+  async function getData(){
+    let filter ={ordering:'course_name'}
+    data.value  = await Course.objects.filter(filter)
+  }
+  
+  // function setOrdering(name){
+  //   ordering.value=name
+  // }
+  onMounted(()=>getData())
+  // onMounted(()=>setOrdering('course_name'))
+  watch(()=>props.search,()=>getData())
 </script>
 
 <template>

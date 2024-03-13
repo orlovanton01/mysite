@@ -8,7 +8,7 @@ from .models import Course
 import csv
 
 class CourseFilter(django_filters.FilterSet):
-    search = filters.CharFilter(field_name="course_name", lookup_expr="icontains")
+    # search = filters.CharFilter(field_name="course_name", lookup_expr="icontains")
     class Meta:
         model = Course
         fields = '__all__'

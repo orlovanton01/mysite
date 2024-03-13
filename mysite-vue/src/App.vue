@@ -4,14 +4,20 @@ import HelloWorld from './components/HelloWorld.vue'
 import { ref,onMounted} from "vue"
 import {Course} from "@/api.js"
 
-const props =defineProps(['search'])
 const search = ref("")
 const data =ref([])
-  async function getData(){
-      data.value   = await Course.objects.filter({course_name:search.value})
-  }
-  onMounted(()=>getData())
-  // watch(()=>props.search,()=>getData())
+async function getData(s){
+    search.value=s
+    data.value = await Course.objects.filter({course_name:search.value})
+    console.log(data.value)
+}
+// async function getSearch(){
+//     search.value  = search
+//     // console.log(data.value)
+// }
+onMounted(()=>getData())
+// onMounted(()=>getSearch())
+// watch(()=>props.search,()=>getData())
 </script>
 
 <template>
@@ -43,7 +49,7 @@ const data =ref([])
             </li>
           </ul>
           <form class="d-flex" role="search">
-            <input v-model="search" @input="getData" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
+            <input :search="search" @input="getData(search)" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
             <button class="btn btn-outline-success" type="submit">Поиск</button>
           </form>
         </div>
