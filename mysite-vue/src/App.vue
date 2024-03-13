@@ -4,12 +4,14 @@ import HelloWorld from './components/HelloWorld.vue'
 import { ref,onMounted} from "vue"
 import {Course} from "@/api.js"
 
+const props =defineProps(['search'])
 const search = ref("")
 const data =ref([])
   async function getData(){
       data.value   = await Course.objects.filter({course_name:search.value})
   }
   onMounted(()=>getData())
+  // watch(()=>props.search,()=>getData())
 </script>
 
 <template>

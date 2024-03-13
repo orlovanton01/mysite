@@ -16,6 +16,7 @@
     // }
     onMounted(()=>getData())
     // onMounted(()=>setOrdering('course_name'))
+    // watch(()=>props.search,()=>getData())
 </script>
 
 <template>
