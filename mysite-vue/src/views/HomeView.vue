@@ -3,11 +3,19 @@
   import { ref,onMounted} from "vue"
   import {Course} from "@/api.js"
 
+  const ordering = ref('')
   const data =ref([])
+
     async function getData(){
-        data.value   = await Course.objects.filter()
+      let filter ={ordering:'course_name'}
+      data.value   = await Course.objects.filter(filter)
     }
+    
+    // function setOrdering(name){
+    //   ordering.value=name
+    // }
     onMounted(()=>getData())
+    // onMounted(()=>setOrdering('course_name'))
 </script>
 
 <template>

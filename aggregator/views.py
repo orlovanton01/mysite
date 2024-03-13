@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from rest_framework import routers, serializers, viewsets
 import django_filters
 from django_filters import rest_framework as filters
+from rest_framework.filters import OrderingFilter
 
 from .models import Course
 import csv
@@ -21,7 +22,8 @@ class CourseSerializer(serializers.ModelSerializer):
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (OrderingFilter, filters.DjangoFilterBackend,)
+    ordering_fields = '__all__'
     filterset_class = CourseFilter
 
 def index(request):
