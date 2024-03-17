@@ -9,15 +9,19 @@
   const data =ref([])
 
   async function getData(){
-    let filter ={ordering:'course_name'}
+    let filter ={ordering: 'course_name'}
     data.value  = await Course.objects.filter(filter)
   }
   
-  // function setOrdering(name){
-  //   ordering.value=name
-  // }
+  function setOrdering(field, order){
+    console.log(field, order)
+    if (order=='По возрастанию')
+      ordering.value=field
+    else 
+      ordering.value='-'+field  
+  }
   onMounted(()=>getData())
-  // onMounted(()=>setOrdering('course_name'))
+  // onMounted(()=>setOrdering('course_name', 'По возрастанию'))
   watch(()=>props.search,()=>getData())
 </script>
 
@@ -28,14 +32,14 @@
           <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Сортировать</label>
             <div class="input-group">
-              <select class="form-select">
-                <option value="1">По названию</option>
-                <option value="2">По стоимости</option>
-                <option value="3">По сроку обучения</option>
+              <select class="form-select" id="field">
+                <option value="По названию">По названию</option>
+                <option value="По стоимости">По стоимости</option>
+                <option value="По сроку обучения">По сроку обучения</option>
               </select>
-              <select class="form-select">
-                <option value="1">По возрастанию</option>
-                <option value="2">По убыванию</option>
+              <select class="form-select" id="order">
+                <option value="По возрастанию">По возрастанию</option>
+                <option value="По убыванию">По убыванию</option>
               </select>
             </div>
           </div>
@@ -53,8 +57,8 @@
               <input type="number" class="form-control" id="exampleFormControlInput3" placeholder="До, мес.">
             </div>
           </div>
-          <button type="submit" class="btn btn-success">Применить</button>
-          <button type="submit" class="btn btn-danger">Сбросить</button>
+          <a type="submit" class="btn btn-success" @click="setOrdering(document.getElementById('field').value, document.getElementById('order').value)">Применить</a>
+          <a type="submit" class="btn btn-danger">Сбросить</a>
         </div>
       </form>
       <div class="col-9" v-if="data">

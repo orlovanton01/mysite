@@ -7,14 +7,14 @@ import {Course} from "@/api.js"
 const search = ref("")
 const data =ref([])
 async function getData(){
-    data.value = await Course.objects.filter({course_name:search.value})
+    data.value = await Course.objects.filter({search:search.value})
     console.log(data.value)
 }
 // async function getSearch(){
 //     search.value  = search
 //     // console.log(data.value)
 // }
-//onMounted(()=>getData())
+onMounted(()=>getData())
 // onMounted(()=>getSearch())
 // watch(()=>props.search,()=>getData())
 </script>
