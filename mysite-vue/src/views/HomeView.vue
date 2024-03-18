@@ -6,23 +6,25 @@
   const props =defineProps(['search'])
   console.log(props.search)
   const ordering = ref('')
+  const field = ref('')
+  const order = ref('')
   const data =ref([])
 
   async function getData(){
-    let filter ={ordering: 'course_name'}
+    let filter ={ordering: ordering.value}
     data.value  = await Course.objects.filter(filter)
   }
-  
-  function setOrdering(field, order){
-    console.log(field, order)
-    if (order=='По возрастанию')
-      ordering.value=field
-    else 
-      ordering.value='-'+field  
-  }
+
   onMounted(()=>getData())
-  // onMounted(()=>setOrdering('course_name', 'По возрастанию'))
   watch(()=>props.search,()=>getData())
+  watch(()=>ordering.value,()=>getData())
+
+  function setOrdering(){
+    if (order.value=='По возрастанию')
+      ordering.value=field.value
+    else 
+      ordering.value='-'+field.value 
+  }
 </script>
 
 <template>
@@ -32,12 +34,12 @@
           <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Сортировать</label>
             <div class="input-group">
-              <select class="form-select" id="field">
-                <option value="По названию">По названию</option>
-                <option value="По стоимости">По стоимости</option>
-                <option value="По сроку обучения">По сроку обучения</option>
+              <select class="form-select" v-model="field">
+                <option value="course_name">По названию</option>
+                <option value="price">По стоимости</option>
+                <option value="training_period">По сроку обучения</option>
               </select>
-              <select class="form-select" id="order">
+              <select class="form-select" v-model="order">
                 <option value="По возрастанию">По возрастанию</option>
                 <option value="По убыванию">По убыванию</option>
               </select>
@@ -57,7 +59,7 @@
               <input type="number" class="form-control" id="exampleFormControlInput3" placeholder="До, мес.">
             </div>
           </div>
-          <a type="submit" class="btn btn-success" @click="setOrdering(document.getElementById('field').value, document.getElementById('order').value)">Применить</a>
+          <a type="submit" class="btn btn-success" @click="setOrdering">Применить</a>
           <a type="submit" class="btn btn-danger">Сбросить</a>
         </div>
       </form>
