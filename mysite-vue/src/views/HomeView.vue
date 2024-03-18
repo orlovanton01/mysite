@@ -25,6 +25,10 @@
     else 
       ordering.value='-'+field.value 
   }
+
+  function reset(){
+    ordering.value=''
+  }
 </script>
 
 <template>
@@ -60,7 +64,7 @@
             </div>
           </div>
           <a type="submit" class="btn btn-success" @click="setOrdering">Применить</a>
-          <a type="submit" class="btn btn-danger">Сбросить</a>
+          <a type="submit" class="btn btn-danger" @click="reset">Сбросить</a>
         </div>
       </form>
       <div class="col-9" v-if="data">
