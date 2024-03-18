@@ -7,16 +7,12 @@ import {Course} from "@/api.js"
 const search = ref("")
 const data =ref([])
 async function getData(){
-    data.value = await Course.objects.filter({search:search.value})
+    data.value = await Course.objects.filter({course_search:search.value})
     console.log(data.value)
 }
-// async function getSearch(){
-//     search.value  = search
-//     // console.log(data.value)
-// }
-onMounted(()=>getData())
+// onMounted(()=>getData())
 // onMounted(()=>getSearch())
-// watch(()=>props.search,()=>getData())
+// watch(()=>data.value,()=>getData())
 </script>
 
 <template>
@@ -48,8 +44,8 @@ onMounted(()=>getData())
             </li>
           </ul>
           <form class="d-flex" role="search">
-            <input :search="search" @input="getData" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
-            <button class="btn btn-outline-success" type="submit">Поиск</button>
+            <input v-model="search" @input="getData" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
+            <a class="btn btn-outline-success" type="submit">Поиск</a>
           </form>
         </div>
       </div>

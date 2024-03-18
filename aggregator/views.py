@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import render, redirect
 from rest_framework import routers, serializers, viewsets
 import django_filters
 from django_filters import rest_framework as filters
@@ -8,7 +8,11 @@ from .models import Course
 import csv
 
 class CourseFilter(django_filters.FilterSet):
-    search = filters.CharFilter(field_name="course_name", lookup_expr="icontains")
+    course_search = filters.CharFilter(field_name="course_name", lookup_expr="icontains")
+    min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
+    max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
+    min_training_period = filters.NumberFilter(field_name="training_period", lookup_expr='gte')
+    max_training_period = filters.NumberFilter(field_name="training_period", lookup_expr='lte')
     class Meta:
         model = Course
         fields = '__all__'
@@ -31,8 +35,3 @@ def index(request):
     latest_courses_list=Course.objects.order_by("course_name")
     context = {"latest_courses_list": latest_courses_list}
     return render(request, "aggregator/index.html", context)
-
-
-def detail(request, course_id):
-    course = get_object_or_404(Course, pk=course_id)
-    return render(request, "aggregator/detail.html", {"course": course})
