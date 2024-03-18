@@ -1,22 +1,30 @@
 <script setup>
   import { RouterLink, RouterView } from 'vue-router'
-  import { ref,onMounted} from "vue"
+  import { ref,onMounted,watch} from "vue"
   import {Course} from "@/api.js"
 
+  const props =defineProps(['search'])
+  console.log(props.search)
   const ordering = ref('')
+  const field = ref('')
+  const order = ref('')
   const data =ref([])
 
-    async function getData(){
-      let filter ={ordering:'course_name'}
-      data.value   = await Course.objects.filter(filter)
-    }
-    
-    // function setOrdering(name){
-    //   ordering.value=name
-    // }
-    onMounted(()=>getData())
-    // onMounted(()=>setOrdering('course_name'))
-    // watch(()=>props.search,()=>getData())
+  async function getData(){
+    let filter ={ordering: ordering.value}
+    data.value  = await Course.objects.filter(filter)
+  }
+
+  onMounted(()=>getData())
+  watch(()=>props.search,()=>getData())
+  watch(()=>ordering.value,()=>getData())
+
+  function setOrdering(){
+    if (order.value=='По возрастанию')
+      ordering.value=field.value
+    else 
+      ordering.value='-'+field.value 
+  }
 </script>
 
 <template>
@@ -26,14 +34,14 @@
           <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Сортировать</label>
             <div class="input-group">
-              <select class="form-select">
-                <option value="1">По названию</option>
-                <option value="2">По стоимости</option>
-                <option value="3">По сроку обучения</option>
+              <select class="form-select" v-model="field">
+                <option value="course_name">По названию</option>
+                <option value="price">По стоимости</option>
+                <option value="training_period">По сроку обучения</option>
               </select>
-              <select class="form-select">
-                <option value="1">По возрастанию</option>
-                <option value="2">По убыванию</option>
+              <select class="form-select" v-model="order">
+                <option value="По возрастанию">По возрастанию</option>
+                <option value="По убыванию">По убыванию</option>
               </select>
             </div>
           </div>
@@ -51,8 +59,8 @@
               <input type="number" class="form-control" id="exampleFormControlInput3" placeholder="До, мес.">
             </div>
           </div>
-          <button type="submit" class="btn btn-success">Применить</button>
-          <button type="submit" class="btn btn-danger">Сбросить</button>
+          <a type="submit" class="btn btn-success" @click="setOrdering">Применить</a>
+          <a type="submit" class="btn btn-danger">Сбросить</a>
         </div>
       </form>
       <div class="col-9" v-if="data">
