@@ -3,8 +3,7 @@
   import { ref,onMounted,watch} from "vue"
   import {Course} from "@/api.js"
 
-  const props =defineProps(['data'])
-  console.log(props.data)
+  const props =defineProps(['search', 'data'])
   const ordering = ref('')
   const order = ref('')
   ordering.value='course_name'
@@ -21,6 +20,10 @@
       filter ={ordering: ordering.value}
     else
       filter ={ordering: '-'+ordering.value}
+    if (props.search){
+      console.log(props.search)
+      filter.search=props.search
+    }
     if (min_price.value)
       filter.min_price=min_price.value
     if (max_price.value)
@@ -29,10 +32,16 @@
       filter.min_training_period=min_training_period.value
     if (max_training_period.value)
       filter.max_training_period=max_training_period.value
+    // if (props.data){
+    //   console.log(props.data)
+    //   data.value=props.data
+    // }
+    // else
     data.value  = await Course.objects.filter(filter)
   }
 
   onMounted(()=>getData())
+  watch(()=>props.search,()=>getData())
   watch(()=>props.data,()=>getData())
   watch(()=>ordering.value,()=>getData())
   watch(()=>order.value,()=>getData())
