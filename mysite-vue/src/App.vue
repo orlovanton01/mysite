@@ -7,7 +7,7 @@ import { useSearchStore } from "@/stores/search.js"
 
 const search = ref("")
 const res_search=useSearchStore()
-res_search.addSearch(getSearch())
+res_search.addSearch(search.value)
 const data =ref([])
 async function getData(){
     data.value = await Course.objects.filter({search:search.value})
@@ -15,11 +15,11 @@ async function getData(){
     console.log(search)
 }
 
-function getSearch(){
-  return search.value
-}
+// function getSearch(){
+//   return search.value
+// }
 // onMounted(()=>getSearch())
-watch(()=>search.value,()=>getSearch())
+watch(()=>search.value,()=>addSearch())
 </script>
 
 <template>
