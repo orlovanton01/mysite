@@ -1,18 +1,25 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
-import { ref,onMounted} from "vue"
+import { ref,onMounted, watch} from "vue"
 import {Course} from "@/api.js"
+import { useSearchStore } from "@/stores/search.js"
 
 const search = ref("")
+const res_search=useSearchStore()
+res_search.addSearch(getSearch())
 const data =ref([])
 async function getData(){
     data.value = await Course.objects.filter({search:search.value})
     console.log(data.value)
     console.log(search)
 }
-// onMounted(()=>getData())
-// watch(()=>data.value,()=>getData())
+
+function getSearch(){
+  return search.value
+}
+// onMounted(()=>getSearch())
+watch(()=>search.value,()=>getSearch())
 </script>
 
 <template>

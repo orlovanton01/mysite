@@ -2,6 +2,7 @@
   import { RouterLink, RouterView } from 'vue-router'
   import { ref,onMounted,watch} from "vue"
   import {Course} from "@/api.js"
+  // import { useSearchStore } from "@/stores/search.js"
 
   const props =defineProps(['search', 'data'])
   const ordering = ref('')
@@ -13,6 +14,8 @@
   const max_price = ref('')
   const min_training_period = ref('')
   const max_training_period = ref('')
+  // let store=useSearchStore()
+  // console.log(store)
 
   async function getData(){
     let filter
