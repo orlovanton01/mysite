@@ -40,7 +40,7 @@ async function getData(){
               <a class="nav-link active" aria-current="page" href="#">Сравнение</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Избранное</a>
+              <a class="nav-link active" aria-current="page" href="/favourites">Избранное</a>
             </li>
           </ul>
           <form class="d-flex" role="search">
