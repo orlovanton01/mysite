@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-
+import axios from "axios"
 
 // В роутере пишем перенаправления отрисовок для порта 5173
 const router = createRouter({
@@ -27,9 +27,36 @@ const router = createRouter({
     {
       path: '/favourites',
       name: 'favourites',
-      component: () => import('../views/FavView.vue')
+      component: () => import('../views/FavView.vue'),
+      beforeEnter: (to, from, next) => {
+        IsAuth(to,from,next)
+      },
+    },
+    {
+      path: '/needauth',
+      name: 'needauth',
+      component: () => import('../views/NeedAuthView.vue'),
     }
   ]
 })
 
 export default router
+
+
+const IsAuth = function(to, from, next) {
+  axios.get("/session/")
+        .then(result=>{
+          if (result.data.isAuthenticated){
+            console.log("Перенаправляем на избранное")
+            next()
+          }
+          else {
+            console.log("Перенаправляем на страницу ошибки")
+            next('needauth')
+          }
+        })
+        .catch(error=>{
+          console.log("Ошибка при выполнении запроса")
+          return false
+        })
+};

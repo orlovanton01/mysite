@@ -1,5 +1,5 @@
 <template>
-  <strong>Хоба, это страница с избранным</strong>
+  <strong>Для доступа к избранному вам необходимо авторизоваться</strong>
 </template>
 
 <script setup>
@@ -10,8 +10,8 @@
   async function Req(){
     axios.get("/whoami/")
     .then(result=>{
-      // console.log("ниже setup request")
+      // console.log("Страница перенаправления на логин")
       // console.log(result.data)
-    })
+      })
   }
 </script>
