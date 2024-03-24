@@ -10,8 +10,8 @@
   async function Req(){
     axios.get("/whoami/")
     .then(result=>{
-      // console.log("ниже setup request")
-      // console.log(result.data)
+      console.log("ниже setup request")
+      console.log(result.data)
     })
   }
 </script>

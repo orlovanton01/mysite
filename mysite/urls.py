@@ -36,7 +36,7 @@ urlpatterns = [
     path('token/', views.obtain_auth_token),
 
     path('csrf/', lh.get_csrf, name='api-csrf'),
-    path('login/', lh.login_view, name='api-login'),
+    path('loginuser/', lh.login_view, name='api-login'),
     path('logout/', lh.logout_view, name='api-logout'),
     path('session/', lh.session_view, name='api-session'),
     path('whoami/', lh.whoami_view, name='api-whoami'),

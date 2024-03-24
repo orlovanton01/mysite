@@ -53,46 +53,113 @@
   </div> -->
 </template>
 
-<script>
-  import $ from 'jquery'
-  export default {
-      name: "Login",
-      data() {
-          return {
-              login: '',
-              password: '',
-          }
-      },
-      methods: {
-          setLogin() {
-              $.ajax({
-                  url: "http://localhost:8000/token/",
-                  // "http://localhost:8000/token/" СРАБОТАЛ
-                  type: "POST",
-                  data: {
-                      username: this.login,
-                      password: this.password
-                  },
-                  success: (response) => {
-                      
-                      console.log(response)
-                      localStorage.setItem("auth_token", response.token)
-                      // this.$router.push({name: "/"})
-                      alert("Спасибо что Вы с нами")
-                  },
-                  error: (response) => {
-                      if (response.status === 400) {
-                          alert("Логин или пароль не верен")
-                      }
-                      else{
-                        console.log(response)
-                        alert(response)
-                      }
-                  }
-              })
-          },
+<script setup>
+  import axios from "axios"
+  import { ref,onMounted,watch} from "vue"
+  
+  const login = ref('')
+  const password = ref('')
+
+  async function setLogin(){
+    axios.post("/loginuser/", {
+      // withcredentials: true,
+      username: login.value,
+      password: password.value
+    },
+    // {
+    //   headers: {
+    //     "X-CSRFToken": getCsrfToken(),
+    //     "Content-Type": "application/json",
+    //     "Accept": "application/json",
+    //   },
+    // }
+    )
+    .then(response=>{
+              // localStorage.setItem("auth_token", response.token)
+              // this.$router.push({name: "/"})
+        console.log(response.data)
+        alert("Спасибо что Вы с нами")
+      })
+    .catch(error => {
+      if (error.status === 400) {
+        alert("Логин или пароль не верен")
       }
+      else{
+        console.log(error.response)
+        alert(error)
+      }
+    })
   }
+  
+  // export default {
+  //     name: "Login",
+  //     data() {
+  //         return {
+  //             login: '',
+  //             password: '',
+  //         }
+  //     },
+  //     methods: {
+  //         setLogin() {
+            
+  //           axios.post("/loginuser/", {
+  //             // withcredentials: true,
+  //             username: this.login,
+  //             password: this.password
+  //           },
+  //           // {
+  //           //   headers: {
+  //           //     "X-CSRFToken": getCsrfToken(),
+  //           //     "Content-Type": "application/json",
+  //           //     "Accept": "application/json",
+  //           //   },
+  //           // }
+  //           )
+  //           .then(response=>{
+  //                     // localStorage.setItem("auth_token", response.token)
+  //                     // this.$router.push({name: "/"})
+  //               console.log(response.data)
+  //               alert("Спасибо что Вы с нами")
+  //             })
+  //           .catch(error => {
+  //             if (error.status === 400) {
+  //               alert("Логин или пароль не верен")
+  //             }
+  //             else{
+  //               console.log(error.response)
+  //               alert(error)
+  //             }
+  //           })
+
+
+              // $.ajax({
+              //     url: "http://localhost:8000/token/",
+              //     // "http://localhost:8000/token/" СРАБОТАЛ
+              //     type: "POST",
+              //     data: {
+              //         username: this.login,
+              //         password: this.password
+              //     },
+              //     success: (response) => {
+                      
+              //         console.log(response)
+              //         localStorage.setItem("auth_token", response.token)
+              //         // this.$router.push({name: "/"})
+              //         alert("Спасибо что Вы с нами")
+              //     },
+              //     error: (response) => {
+              //         if (response.status === 400) {
+              //             alert("Логин или пароль не верен")
+              //         }
+              //         else{
+              //           console.log(response)
+              //           alert(response)
+              //         }
+              //     }
+              // })
+  //         },
+  //     }
+  // }
 </script>
 
 <style>

@@ -34,10 +34,10 @@ export default defineConfig({
       },
 
 
-      "^/login": {
+      "^/loginuser": {
         "target": "http://127.0.0.1:8000",
         "ws": true,
-        "changeOrigin": true
+        "changeOrigin": true,
       },
       "^/register": {
         "target": "http://127.0.0.1:8000",
