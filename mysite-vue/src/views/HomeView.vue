@@ -1,10 +1,7 @@
 <script setup>
-  import { RouterLink, RouterView } from 'vue-router'
   import { ref,onMounted,watch} from "vue"
   import {Course} from "@/api.js"
-  // import { useSearchStore } from "@/stores/search.js"
 
-  const props =defineProps(['search', 'data'])
   const ordering = ref('')
   const order = ref('')
   ordering.value='course_name'
@@ -14,8 +11,7 @@
   const max_price = ref('')
   const min_training_period = ref('')
   const max_training_period = ref('')
-  // let store=useSearchStore()
-  // console.log(store)
+  const search = ref("")
 
   async function getData(){
     let filter
@@ -23,10 +19,8 @@
       filter ={ordering: ordering.value}
     else
       filter ={ordering: '-'+ordering.value}
-    if (props.search){
-      console.log(props.search)
-      filter.search=props.search
-    }
+    if (search.value)
+      filter.search=search.value
     if (min_price.value)
       filter.min_price=min_price.value
     if (max_price.value)
@@ -35,17 +29,11 @@
       filter.min_training_period=min_training_period.value
     if (max_training_period.value)
       filter.max_training_period=max_training_period.value
-    // if (props.data){
-    //   console.log(props.data)
-    //   data.value=props.data
-    // }
-    // else
     data.value  = await Course.objects.filter(filter)
   }
 
   onMounted(()=>getData())
-  watch(()=>props.search,()=>getData())
-  watch(()=>props.data,()=>getData())
+  watch(()=>search.value,()=>getData())
   watch(()=>ordering.value,()=>getData())
   watch(()=>order.value,()=>getData())
   watch(()=>min_price.value,()=>getData())
@@ -54,6 +42,7 @@
   watch(()=>max_training_period.value,()=>getData())
 
   function reset(){
+    search.value=''
     order.value=''
     ordering.value=''
     min_price.value=''
@@ -67,6 +56,9 @@
     <div class="row">
       <form class="col-3">
         <div class="sticky">
+          <div class="mb-3">
+            <input v-model="search" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
+          </div>
           <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Сортировать</label>
             <div class="input-group">

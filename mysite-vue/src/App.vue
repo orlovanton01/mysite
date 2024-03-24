@@ -1,25 +1,4 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import { ref,onMounted, watch} from "vue"
-import {Course} from "@/api.js"
-import { useSearchStore } from "@/stores/search.js"
-
-const search = ref("")
-const res_search=useSearchStore()
-res_search.addSearch(search.value)
-const data =ref([])
-async function getData(){
-    data.value = await Course.objects.filter({search:search.value})
-    console.log(data.value)
-    console.log(search)
-}
-
-// function getSearch(){
-//   return search.value
-// }
-// onMounted(()=>getSearch())
-watch(()=>search.value,()=>addSearch())
 </script>
 
 <template>
@@ -50,19 +29,18 @@ watch(()=>search.value,()=>addSearch())
               <a class="nav-link active" aria-current="page" href="#">Избранное</a>
             </li>
           </ul>
-          <form class="d-flex" role="search">
-            <input v-model="search" @input="getData" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
-            <a class="btn btn-outline-success" type="submit">Поиск</a>
-          </form>
         </div>
       </div>
     </nav>
-    <div class="container">
+    <div class="container" id="main">
       <RouterView />
   </div>
 </template>
 
 <style>
+#main{
+  padding-top: 2%;
+}
 *{
   font-size:14px;
 }
