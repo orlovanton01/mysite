@@ -98,3 +98,7 @@ function apiConstructor(apiUrl){
 const courseUrl="/api/course/"
 
 export let Course = apiConstructor(courseUrl)
+
+const favUrl="/api/favorites/"
+
+export let Fav = apiConstructor(favUrl)

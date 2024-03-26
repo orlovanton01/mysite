@@ -4,7 +4,7 @@ import django_filters
 from django_filters import rest_framework as filters
 from rest_framework.filters import OrderingFilter
 
-from .models import Course
+from .models import Course, Favorite, Profile
 import csv
 
 class CourseFilter(django_filters.FilterSet):
@@ -35,3 +35,14 @@ def index(request):
     latest_courses_list=Course.objects.order_by("course_name")
     context = {"latest_courses_list": latest_courses_list}
     return render(request, "aggregator/index.html", context)
+
+class FavSerializer(serializers.ModelSerializer):
+    get_course_img_url = serializers.CharField(read_only=True)
+    class Meta:
+        model = Favorite
+        fields = "__all__"
+
+class FavViewSet(viewsets.ModelViewSet):
+    queryset = Favorite.objects.all()
+    serializer_class = FavSerializer
+    ordering_fields = '__all__'
