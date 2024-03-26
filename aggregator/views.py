@@ -8,7 +8,7 @@ from .models import Course, Favorite, Profile
 import csv
 
 class CourseFilter(django_filters.FilterSet):
-    course_search = filters.CharFilter(field_name="course_name", lookup_expr="icontains")
+    search = filters.CharFilter(field_name="course_name", lookup_expr="icontains")
     min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
     max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
     min_training_period = filters.NumberFilter(field_name="training_period", lookup_expr='gte')

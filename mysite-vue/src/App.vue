@@ -1,18 +1,4 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import { ref,onMounted} from "vue"
-import {Course} from "@/api.js"
-
-const search = ref("")
-const data =ref([])
-async function getData(){
-    data.value = await Course.objects.filter({course_search:search.value})
-    console.log(data.value)
-}
-// onMounted(()=>getData())
-// onMounted(()=>getSearch())
-// watch(()=>data.value,()=>getData())
 </script>
 
 <template>
@@ -43,19 +29,18 @@ async function getData(){
               <a class="nav-link active" aria-current="page" href="/favourites">Избранное</a>
             </li>
           </ul>
-          <form class="d-flex" role="search">
-            <input v-model="search" @input="getData" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
-            <a class="btn btn-outline-success" type="submit">Поиск</a>
-          </form>
         </div>
       </div>
     </nav>
-    <div class="container">
+    <div class="container" id="main">
       <RouterView />
   </div>
 </template>
 
 <style>
+#main{
+  padding-top: 2%;
+}
 *{
   font-size:14px;
 }
