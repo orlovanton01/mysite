@@ -30,6 +30,8 @@
     if (max_training_period.value)
       filter.max_training_period=max_training_period.value
     data.value  = await Course.objects.filter(filter)
+    // console.log(await Course.objects.filter(filter))
+    // console.log(data.value)
   }
 
   onMounted(()=>getData())

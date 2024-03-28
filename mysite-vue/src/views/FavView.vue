@@ -5,14 +5,14 @@
   <div class="row">
       <div class="col-12">
         <div class="row row-cols-1 row-cols-md-4 g-4">
-            <div class="col" v-for="course in data">
+            <div class="col" v-for="info in data">
               <div class="card h-100" style="width: 18rem; ">
-                <img :src="course.get_course_img_url" class="card-img-top" alt="Логотип школы">
+                <img :src="info.course.get_course_img_url" class="card-img-top" alt="Логотип школы">
                 <div class="card-body">
-                  <h5 class="card-title">{{course.course_name}}<br></h5>
-                  <h5 class="card-title">{{course.price}} ₽<br></h5>
-                  <p class="card-text">{{course.training_period}} мес.</p>
-                  <a href='{{course.link}}' class="btn btn-primary">Перейти на сайт</a>
+                  <h5 class="card-title">{{info.course.course_name}}<br></h5>
+                  <h5 class="card-title">{{info.course.price}} ₽<br></h5>
+                  <p class="card-text">{{info.course.training_period}} мес.</p>
+                  <a :href='info.course.link' class="btn btn-primary">Перейти на сайт</a>
                 </div>
               </div>
             </div>
@@ -28,6 +28,7 @@
   onMounted(()=> Req())
   
   let username = ref('') 
+  let userid = ref('')
 
   async function Req() {
     await axios.get("/session/")
@@ -38,6 +39,8 @@
             .then((result)=>{
               console.log("Получен username")
               username.value = result.data.username
+              userid.value = result.data.id
+              getData()
             })
           }
           else {
@@ -51,10 +54,8 @@
         })
   }
 
-  import {Course} from "@/api.js"
+  import {Fav} from "@/api.js"
 
-  const props =defineProps(['data'])
-  console.log(props.data)
   const ordering = ref('')
   const order = ref('')
   ordering.value='course_name'
@@ -66,24 +67,19 @@
   const max_training_period = ref('')
 
   async function getData(){
-    let filter
-    if (order.value=='По возрастанию')
-      filter ={ordering: ordering.value}
-    else
-      filter ={ordering: '-'+ordering.value}
-    if (min_price.value)
-      filter.min_price=min_price.value
-    if (max_price.value)
-      filter.max_price=max_price.value
-    if (min_training_period.value)
-      filter.min_training_period=min_training_period.value
-    if (max_training_period.value)
-      filter.max_training_period=max_training_period.value
-    data.value  = await Course.objects.filter(filter)
-  }
+      // let filter
+      // data.value  = await Fav.objects.filter(filter)
 
-  onMounted(()=>getData())
-  watch(()=>props.data,()=>getData())
+      // data.value = await Fav.objects.filter({user: userid.value})
+      console.log("PreFilter")
+      data.value = await Fav.objects.filter({user: userid.value})
+      // data.value = await Fav.objects.filter({id: 6})
+      console.log(data.value)
+      console.log(userid.value)
+  
+    }
+
+  // onMounted(()=>getData())
   watch(()=>ordering.value,()=>getData())
   watch(()=>order.value,()=>getData())
   watch(()=>min_price.value,()=>getData())
