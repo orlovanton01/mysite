@@ -99,6 +99,6 @@ const courseUrl="/api/course/"
 
 export let Course = apiConstructor(courseUrl)
 
-const favUrl="/api/favorites/"
+const favUrl="/api/favourite/"
 
 export let Fav = apiConstructor(favUrl)

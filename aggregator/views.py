@@ -37,12 +37,6 @@ def index(request):
     return render(request, "aggregator/index.html", context)
 
 
-class FavFilter(django_filters.FilterSet):
-    search = filters.CharFilter(field_name="user", lookup_expr="exact")
-    class Meta:
-        model = Favorite
-        fields = '__all__'
-
 class FavSerializer(serializers.ModelSerializer):
     # get_course_img_url = serializers.CharField(read_only=True)
     
@@ -52,10 +46,15 @@ class FavSerializer(serializers.ModelSerializer):
         model = Favorite
         fields = "__all__"
 
+class FavFilter(django_filters.FilterSet):
+    # search = filters.CharFilter(field_name="user", lookup_expr="exact")
+    class Meta:
+        model = Favorite
+        fields = ['user']
+
 class FavViewSet(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = FavFilter
     ordering_fields = '__all__'
-
