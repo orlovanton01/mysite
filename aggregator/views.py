@@ -7,6 +7,10 @@ from rest_framework.filters import OrderingFilter
 from .models import Course, Favorite #, Profile
 import csv
 
+from rest_framework import serializers    
+from drf_writable_nested.serializers import WritableNestedModelSerializer
+
+
 class CourseFilter(django_filters.FilterSet):
     search = filters.CharFilter(field_name="course_name", lookup_expr="icontains")
     min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
@@ -22,7 +26,8 @@ class CourseSerializer(serializers.ModelSerializer):
     get_course_img_url = serializers.CharField(read_only=True)
     class Meta:
         model = Course
-        fields = "__all__"
+        # fields = "__all__"
+        exclude = ("owner_img",)
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
@@ -37,11 +42,8 @@ def index(request):
     return render(request, "aggregator/index.html", context)
 
 
-class FavSerializer(serializers.ModelSerializer):
-    # get_course_img_url = serializers.CharField(read_only=True)
-    
+class FavSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     course = CourseSerializer()
-
     class Meta:
         model = Favorite
         fields = "__all__"

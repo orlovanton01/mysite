@@ -32,26 +32,26 @@
 
   async function Req() {
     await axios.get("/session/")
-        .then(result=>{
-          if (result.data.isAuthenticated){
-            console.log("Авторизован, загружаю курсы")
-            axios.get("/whoami/")
-            .then((result)=>{
-              console.log("Получен username")
-              username.value = result.data.username
-              userid.value = result.data.id
-              getData()
-            })
-          }
-          else {
-            console.log("Нужно войти")
-            username.value = "Anon"
-          }
+    .then(result=>{
+      if (result.data.isAuthenticated){
+        console.log("Авторизован, загружаю курсы")
+        axios.get("/whoami/")
+        .then((result)=>{
+          console.log("Получен username")
+          username.value = result.data.username
+          userid.value = result.data.id
+          getData()
         })
-        .catch(error=>{
-          console.log("Ошибка при выполнении запроса")
-          username.value = error
-        })
+      }
+      else {
+        console.log("Нужно войти")
+        username.value = "Anon"
+      }
+    })
+    .catch(error=>{
+      console.log("Ошибка при выполнении запроса")
+      username.value = error
+    })
   }
 
   import {Fav} from "@/api.js"
