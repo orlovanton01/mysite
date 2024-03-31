@@ -65,7 +65,7 @@
           console.log("Получен username")
           axios.post("/api/favourite/", {
             "user" : result.data.id,
-            "course" : info
+            "course" : info.id,
           })
         })
       }

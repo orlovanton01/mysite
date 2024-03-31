@@ -4,6 +4,7 @@ import django_filters
 from django_filters import rest_framework as filters
 from rest_framework.filters import OrderingFilter
 
+from django.contrib.auth.models import User
 from .models import Course, Favorite #, Profile
 import csv
 
@@ -47,9 +48,19 @@ class FavSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     class Meta:
         model = Favorite
         fields = "__all__"
+    
+class FavSerializerPost(WritableNestedModelSerializer, serializers.ModelSerializer):
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
+    user= serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    class Meta:
+        model = Favorite
+        fields = "__all__"
+
+    def create(self, validated_data):
+        instance, _ = Favorite.objects.get_or_create(**validated_data)
+        return instance
 
 class FavFilter(django_filters.FilterSet):
-    # search = filters.CharFilter(field_name="user", lookup_expr="exact")
     class Meta:
         model = Favorite
         fields = ['user']
@@ -60,3 +71,11 @@ class FavViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = FavFilter
     ordering_fields = '__all__'
+
+    def get_serializer_class(self):
+        print(self.request.method)
+        if self.request.method == "GET":
+            return FavSerializer
+        else:
+            return FavSerializerPost
+        
