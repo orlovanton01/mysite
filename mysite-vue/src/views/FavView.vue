@@ -13,6 +13,12 @@
                   <h5 class="card-title">{{info.course.price}} ₽<br></h5>
                   <p class="card-text">{{info.course.training_period}} мес.</p>
                   <a :href='info.course.link' class="btn btn-primary">Перейти на сайт</a>
+                  <a class="btn btn-outline-danger" @click="DelFav(info)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                      <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                    </svg>
+                  </a>
                 </div>
               </div>
             </div>
@@ -24,76 +30,58 @@
 
 <script setup>
   import axios from "axios"
-  import { ref,onMounted,watch} from "vue"
-  onMounted(()=> Req())
-  
+  import { ref,onMounted} from "vue"
+  import {Fav} from "@/api.js"
+
+  const data =ref([])
   let username = ref('') 
   let userid = ref('')
 
+  onMounted(()=> Req())
+  
   async function Req() {
     await axios.get("/session/")
     .then(result=>{
       if (result.data.isAuthenticated){
-        console.log("Авторизован, загружаю курсы")
         axios.get("/whoami/")
         .then((result)=>{
-          console.log("Получен username")
           username.value = result.data.username
           userid.value = result.data.id
           getData()
         })
       }
       else {
-        console.log("Нужно войти")
         username.value = "Anon"
       }
     })
     .catch(error=>{
       console.log("Ошибка при выполнении запроса")
-      username.value = error
+      username.value = error.data.response
     })
   }
 
-  import {Fav} from "@/api.js"
-
-  const ordering = ref('')
-  const order = ref('')
-  ordering.value='course_name'
-  order.value='По возрастанию'
-  const data =ref([])
-  const min_price = ref('')
-  const max_price = ref('')
-  const min_training_period = ref('')
-  const max_training_period = ref('')
-
   async function getData(){
-      // let filter
-      // data.value  = await Fav.objects.filter(filter)
-
-      // data.value = await Fav.objects.filter({user: userid.value})
-      console.log("PreFilter")
+      // console.log("PreFilter")
       data.value = await Fav.objects.filter({user: userid.value})
-      // data.value = await Fav.objects.filter({id: 6})
-      console.log(data.value)
-      console.log(userid.value)
-  
+      // console.log(data.value)
     }
 
-  // onMounted(()=>getData())
-  watch(()=>ordering.value,()=>getData())
-  watch(()=>order.value,()=>getData())
-  watch(()=>min_price.value,()=>getData())
-  watch(()=>max_price.value,()=>getData())
-  watch(()=>min_training_period.value,()=>getData())
-  watch(()=>max_training_period.value,()=>getData())
+  async function DelFav(info){
+    await axios.get("/session/")
+    .then(result=>{
+      if (result.data.isAuthenticated){
+        axios.get("/whoami/")
+        .then((result)=>{
+          console.log("Получен username")
 
-  function reset(){
-    order.value=''
-    ordering.value=''
-    min_price.value=''
-    max_price.value=''
-    min_training_period.value=''
-    max_training_period.value=''
+          axios.delete(`/api/favourite/${info.id}/`)
+          .then(()=>getData())
+        })
+      }
+    })
+    .catch(error=>{
+      console.log("Ошибка при выполнении запроса")
+    })
   }
 
 </script>
