@@ -20,16 +20,27 @@ from aggregator import views
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
-from aggregator.views import CourseViewSet
+from aggregator.views import CourseViewSet, FavViewSet
+from rest_framework.authtoken import views
+from . import loginhandler as lh
 
 router = routers.DefaultRouter()
 
 router.register(r'course', CourseViewSet)
+router.register(r'favourite', FavViewSet)
 
+# Это эндпоинты. К ним делаем запросы на порте 8000
 urlpatterns = [
     path("", include("aggregator.urls")),
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('token/', views.obtain_auth_token),
+
+    path('csrf/', lh.get_csrf, name='api-csrf'),
+    path('loginuser/', lh.login_view, name='api-login'),
+    path('logout/', lh.logout_view, name='api-logout'),
+    path('session/', lh.session_view, name='api-session'),
+    path('whoami/', lh.whoami_view, name='api-whoami'),
 ]
 
 if settings.DEBUG:

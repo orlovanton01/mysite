@@ -30,3 +30,6 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+/mysite-vue/node_modules
+/mysite-vue/node_modules

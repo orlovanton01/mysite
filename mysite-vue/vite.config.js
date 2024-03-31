@@ -28,10 +28,32 @@ export default defineConfig({
        },
  
        "^/media": {
-         "target": "http://127.0.0.1:8000",
-         "ws": true,
-         "changeOrigin": true
-       },
-         }
-     }
+        "target": "http://127.0.0.1:8000",
+        "ws": true,
+        "changeOrigin": true
+      },
+
+
+      "^/loginuser": {
+        "target": "http://127.0.0.1:8000",
+        "ws": true,
+        "changeOrigin": true,
+      },
+      "^/register": {
+        "target": "http://127.0.0.1:8000",
+        "ws": true,
+        "changeOrigin": true
+      },
+      "^/session": {
+        "target": "http://127.0.0.1:8000",
+        "ws": true,
+        "changeOrigin": true
+      },
+      "^/whoami": {
+        "target": "http://127.0.0.1:8000",
+        "ws": true,
+        "changeOrigin": true
+      },
+    }
+  }
 })
