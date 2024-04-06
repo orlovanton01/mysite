@@ -19,7 +19,7 @@ export default defineConfig({
        "^/api": {
          "target": "http://127.0.0.1:8000",
          "ws": true,
-         "changeOrigin": true
+         "changeOrigin": true,
        },
        "^/admin": {
          "target": "http://127.0.0.1:8000",
@@ -39,7 +39,7 @@ export default defineConfig({
         "ws": true,
         "changeOrigin": true,
       },
-      "^/register": {
+      "^/registeruser": {
         "target": "http://127.0.0.1:8000",
         "ws": true,
         "changeOrigin": true
@@ -50,6 +50,11 @@ export default defineConfig({
         "changeOrigin": true
       },
       "^/whoami": {
+        "target": "http://127.0.0.1:8000",
+        "ws": true,
+        "changeOrigin": true
+      },
+      "/logout": {
         "target": "http://127.0.0.1:8000",
         "ws": true,
         "changeOrigin": true

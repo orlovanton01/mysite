@@ -38,6 +38,7 @@ urlpatterns = [
 
     path('csrf/', lh.get_csrf, name='api-csrf'),
     path('loginuser/', lh.login_view, name='api-login'),
+    path('registeruser/', lh.register_view, name='api-register'),
     path('logout/', lh.logout_view, name='api-logout'),
     path('session/', lh.session_view, name='api-session'),
     path('whoami/', lh.whoami_view, name='api-whoami'),

@@ -8,34 +8,45 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: '',
       component: HomeView
     },
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/LoginView.vue'),
+      beforeEnter: (to, from, next) => {
+        DisableUserEntry(to, from, next)
+      },
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegView.vue'),
+      beforeEnter: (to, from, next) => {
+        DisableUserEntry(to, from, next)
+      },
     },
     {
       path: '/favourites',
       name: 'favourites',
       component: () => import('../views/FavView.vue'),
       beforeEnter: (to, from, next) => {
-        IsAuth(to,from,next)
+        DisableGuestEntry(to,from,next)
       },
     },
     {
       path: '/needauth',
       name: 'needauth',
       component: () => import('../views/NeedAuthView.vue'),
+      beforeEnter: (to, from, next) => {
+        DisableUserEntry(to, from, next)
+      },
     }
   ]
 })
@@ -43,20 +54,40 @@ const router = createRouter({
 export default router
 
 
-const IsAuth = function(to, from, next) {
+const DisableGuestEntry = function(to, from, next) {
   axios.get("/session/")
-        .then(result=>{
-          if (result.data.isAuthenticated){
-            console.log("Перенаправляем на избранное")
-            next()
-          }
-          else {
-            console.log("Перенаправляем на страницу ошибки")
-            next('needauth')
-          }
-        })
-        .catch(error=>{
-          console.log("Ошибка при выполнении запроса")
-          return false
-        })
+  .then(result=>{
+    if (result.data.isAuthenticated){
+      // Перенаправляем на избранное
+      next()
+    }
+    else {
+      // Перенаправляем на страницу ошибки
+      next('needauth')
+    }
+  })
+  .catch(error=>{
+    // Ошибка при выполнении запроса
+    return false
+  })
+};
+
+const DisableUserEntry = function (to, from, next) {
+  axios.get("/session/")
+  .then(result=>{
+    const IA = result.data.isAuthenticated
+    if (IA){
+      // Перенаправляем на домашнюю страницу
+      next('')
+    }
+    else {
+      // Перенаправляем на искомую страницу
+      next()
+    }
+  })
+  .catch(error=>{
+    console.log("Ошибка при выполнении запроса")
+    alert(error)
+    return error
+  })
 };

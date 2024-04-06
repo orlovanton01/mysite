@@ -12,7 +12,7 @@
           <form>
 
             <div class="form-outline mb-4">
-              <h3 class="form-label fst-italic fw-bold">Авторизация</h3>
+              <h3 class="form-label fst-italic fw-bold">Регистрация</h3>
             </div>
 
             <!-- Login input -->
@@ -23,12 +23,14 @@
 
             <!-- Password input -->
             <div class="form-outline mb-4">
-              <input id="form2Example2" class="form-control" v-model="password" type="password" placeholder="Password"/>
+              <input id="form2Example2" class="form-control" v-model="password1" type="password" placeholder="Password"/>
               <label class="form-label" for="form2Example2">Пароль</label>
+              <input id="form2Example3" class="form-control" v-model="password2" type="password" placeholder="Confirm password"/>
+              <label class="form-label" for="form2Example2">Повторите пароль</label>
             </div>
 
             <!-- Submit button -->
-            <a type="submit button" class="btn btn-primary btn-block mb-4"  @click="setLogin" >Войти</a>
+            <a class="btn btn-primary btn-block mb-4" @click="setLogin" >Войти</a>
 
           </form>
 
@@ -49,19 +51,25 @@
   import { ref,onMounted,watch} from "vue"
   
   const login = ref('')
-  const password = ref('')
+  const password1 = ref('')
+  const password2 = ref('')
 
   async function setLogin(){
-    axios.post("/loginuser/", {
+    axios.post("/registeruser/", {
+      // withcredentials: true,
       username: login.value,
-      password: password.value
+      password1: password1.value,
+      password2: password2.value,
     })
     .then(response=>{
-        window.location.replace('/')
+        if (response.data.status != 400){
+          window.location.replace('/')
+        }
+        
       })
     .catch(error => {
       if (error.response.status === 400) {
-        alert("Логин или пароль не верен, убедитесь в правильности введенных данных")
+        alert("Убедитесь в правильности введенных данных: \n" + error.response.data.errors.join("\n"))
       }
       else{
         console.log(error.response)

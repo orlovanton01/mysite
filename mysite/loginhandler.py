@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -37,6 +38,44 @@ def logout_view(request):
 
     logout(request)
     return JsonResponse({'detail': 'Successfully logged out.'})
+
+from django import forms
+class RegForm(forms.Form):
+    username = forms.CharField(max_length=100)
+    password1 = forms.PasswordInput
+    password2 = forms.PasswordInput
+
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+def register_view(request):
+    data = json.loads(request.body)
+    username = data.get('username').lower()
+    password1 = data.get('password1')
+    password2 = data.get('password2')
+    form = RegForm(data)
+    try:
+        validate_password (password1)
+        validate_password (password2)
+    except ValidationError as e:
+        return JsonResponse({'detail': 'Form is NOT valid', 'errors' : e.messages},status=400)
+    if form.is_valid():
+
+        if username is None:
+            form.add_error(None,"Поле пользователя пустое")
+        elif password1 != password2:
+            form.add_error(None,"Пароли не совпадают")
+        elif User.objects.filter(username=username).exists():
+            print(User.objects.filter(username=username).exists())
+            form.add_error(None,"Пользователь с таким логином уже зарегистрирован")
+        else:
+            user = User.objects.create(username=username, password=password1)
+            login(request, user)
+            return JsonResponse({'detail': f'Created user {user.username}', 'errors' : ""})
+    return JsonResponse({'detail': 'Form is NOT valid', 'errors': [form.non_field_errors()]},status=400)
+
+    
+    
+
 
 
 @ensure_csrf_cookie
