@@ -34,9 +34,6 @@ class VerifyCaptcha(APIView):
         r = requests.post(GOOGLE_URL, data=body, json=body,)
         # Receiving the response
         google_response = r.json()
-        print(google_response)
-        print(google_response)
-        print(google_response)
         # Analyzing the response
         if google_response['success'] == True:
             # Preparing our response that will be send to our front-end

@@ -62,10 +62,7 @@
       password2: password2.value,
     })
     .then(response=>{
-        if (response.data.status != 400){
-          window.location.replace('/')
-        }
-        
+        window.location.replace('/')
       })
     .catch(error => {
       if (error.response.status === 400) {
