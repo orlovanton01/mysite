@@ -15,6 +15,7 @@ import "bootstrap"
 
 
 import { VueRecaptchaPlugin } from 'vue-recaptcha/head'
+import {YOUR_V2_SITEKEY_HERE, YOUR_V3_SITEKEY_HERE} from './config'
 
 
 
@@ -25,8 +26,8 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(VueRecaptchaPlugin, {
-    v2SiteKey: '6LchCrMpAAAAAJhHAvgrfHTOZu-Qh4omd_pN8f5e',
-    v3SiteKey: '6LfxELMpAAAAAITRlY3SlD6HyZcB6TN3p4hpsWv9',
+    v2SiteKey: YOUR_V2_SITEKEY_HERE,
+    v3SiteKey: YOUR_V3_SITEKEY_HERE,
 })
 
 app.mount('#app')

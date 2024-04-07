@@ -34,3 +34,5 @@ coverage
 /mysite-vue/node_modules
 /mysite-vue/node_modules
 mysite/config.py
+mysite/config.txt
+mysite-vue/src/config.js

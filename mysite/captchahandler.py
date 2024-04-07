@@ -6,7 +6,7 @@ from rest_framework import status
 
 import json
 import requests
-from config import YOUR_SECRET_KEY_V2, YOUR_SECRET_KEY_V3
+from .config import YOUR_SECRET_KEY_V2, YOUR_SECRET_KEY_V3
 
 GOOGLE_URL = 'https://www.google.com/recaptcha/api/siteverify'
 
