@@ -23,6 +23,7 @@ from rest_framework import routers
 from aggregator.views import CourseViewSet, FavViewSet
 from rest_framework.authtoken import views
 from . import loginhandler as lh
+from . import captchahandler as ch
 
 router = routers.DefaultRouter()
 
@@ -42,6 +43,7 @@ urlpatterns = [
     path('logout/', lh.logout_view, name='api-logout'),
     path('session/', lh.session_view, name='api-session'),
     path('whoami/', lh.whoami_view, name='api-whoami'),
+    path('api/verify-captcha/', ch.VerifyCaptcha.as_view(), name='verify-captcha'),
 ]
 
 if settings.DEBUG:

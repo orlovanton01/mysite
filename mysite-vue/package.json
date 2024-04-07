@@ -9,11 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@unhead/vue": "^1.9.4",
     "axios": "^1.6.7",
     "bootstrap": "^5.3.3",
     "bootstrap-vue": "^2.23.1",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
+    "vue-recaptcha": "^3.0.0-alpha.6",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
