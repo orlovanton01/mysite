@@ -1,5 +1,5 @@
 <template>
-  <strong>Если вы видите эту страницу то вы авторизованы. В дальнейшем здесь будут находиться сохраненные в избранное крусы</strong>
+  <strong>Если вы видите эту страницу то вы авторизованы. В дальнейшем здесь будут находиться сохраненные в избранное курсы</strong>
   <h3>Избранное пользователя {{ username }}</h3>
 
   <div class="row">
@@ -32,56 +32,82 @@
   import axios from "axios"
   import { ref,onMounted} from "vue"
   import {Fav} from "@/api.js"
+  import { useRecaptchaProvider } from 'vue-recaptcha'
+  import { useChallengeV3 } from 'vue-recaptcha'
 
   const data =ref([])
   let username = ref('') 
   let userid = ref('')
+  const human = ref(false)
 
-  onMounted(()=> Req())
+  onMounted(()=> onSubmit())
   
   async function Req() {
-    await axios.get("/session/")
-    .then(result=>{
-      if (result.data.isAuthenticated){
-        axios.get("/whoami/")
-        .then((result)=>{
-          username.value = result.data.username
-          userid.value = result.data.id
-          getData()
-        })
-      }
-      else {
-        username.value = "Anon"
-      }
-    })
-    .catch(error=>{
-      console.log("Ошибка при выполнении запроса")
-      username.value = error.data.response
-    })
+    if (human.value == true){
+      await axios.get("/session/")
+      .then(result=>{
+        if (result.data.isAuthenticated){
+          axios.get("/whoami/")
+          .then((result)=>{
+            username.value = result.data.username
+            userid.value = result.data.id
+            getData()
+          })
+        }
+        else {
+          username.value = "Anon"
+        }
+      })
+      .catch(error=>{
+        console.log("Ошибка при выполнении запроса")
+        username.value = error.data.response
+      })
+    }
+    
   }
 
   async function getData(){
       // console.log("PreFilter")
-      data.value = await Fav.objects.filter({user: userid.value})
+      if (human.value == true){
+        data.value = await Fav.objects.filter({user: userid.value})
+      }
       // console.log(data.value)
     }
 
   async function DelFav(info){
-    await axios.get("/session/")
-    .then(result=>{
-      if (result.data.isAuthenticated){
-        axios.get("/whoami/")
-        .then((result)=>{
-          console.log("Получен username")
+    if (human.value == true){
+      await axios.get("/session/")
+      .then(result=>{
+        if (result.data.isAuthenticated){
+          axios.get("/whoami/")
+          .then((result)=>{
+            console.log("Получен username")
 
-          axios.delete(`/api/favourite/${info.id}/`)
-          .then(()=>getData())
-        })
-      }
-    })
-    .catch(error=>{
-      console.log("Ошибка при выполнении запроса")
-    })
+            axios.delete(`/api/favourite/${info.id}/`)
+            .then(()=>getData())
+          })
+        }
+      })
+      .catch(error=>{
+        console.log("Ошибка при выполнении запроса")
+      })
+    }
   }
 
+  useRecaptchaProvider()
+  const { execute } = useChallengeV3('submit')
+
+  async function onSubmit() {
+    const response = await execute()
+    // do something with response
+    axios.post('/api/verify-captcha/',{
+      "token": response,
+      "version" : "V3",
+    })
+    .then(result => {
+      console.log(result.data.is_human)
+      human.value = result.data.is_human
+      Req()
+    })
+  }
 </script>

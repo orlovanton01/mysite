@@ -19,11 +19,11 @@ class VerifyCaptcha(APIView):
         # This is POST endpoint that we were calling with axios in the first front-end example.
     def post(self, request, *args, **kwargs):
         # Decoding the payload
-        request = json.loads(request.body.decode('utf-8'))
+        # request = json.loads(request.data)
         # Taking out the token from the payload
-        TOKEN_GENERATED_ON_FRONT_END_ACTION = request['token']
-        VERSION = request['version']
-        KEY = YOUR_SECRET_KEY_V3 if VERSION == 'V3' else YOUR_SECRET_KEY_V2
+        TOKEN_GENERATED_ON_FRONT_END_ACTION = request.data['token']
+        VERSION = request.data['version']
+        KEY = YOUR_SECRET_KEY_V3
         # Creating body to send to Google for verification. You could also pass user's IP as an optional parameter but I never do that.
         body = {
             "secret": KEY,
@@ -38,15 +38,11 @@ class VerifyCaptcha(APIView):
             # Preparing our response that will be send to our front-end
             response = {"is_human": True}
 
-            if VERSION == "V3":
-                # This is our custom logic in case the request was initiated by a bot.
-                if google_response['score'] < 0.5:
-                    response['is_human'] = False
-                return Response(
-                    data=response, status=status.HTTP_200_OK, content_type="application/json")
-            else:
-                return Response(
-                    data=response, status=status.HTTP_200_OK, content_type="application/json")
+            # This is our custom logic in case the request was initiated by a bot.
+            if google_response['score'] < 0.5:
+                response['is_human'] = False
+            return Response(
+                data=response, status=status.HTTP_200_OK, content_type="application/json")
         else:
             return Response(
                 data={"is_human": None, "message": "Validation of FE token went wront."}, status=status.HTTP_404_NOT_FOUND, content_type="application/json")

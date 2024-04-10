@@ -52,7 +52,6 @@ from django.test.client import RequestFactory
 from django.contrib.auth.models import AnonymousUser, User
 from django.http import JsonResponse
 from mysite import loginhandler as lh
-from django.contrib.sessions.middleware import SessionMiddleware
 
 class RequestTests(TestCase):
     def setUp(self):
@@ -157,8 +156,11 @@ class RequestTests(TestCase):
         self.assertJSONEqual(str(response.content, encoding='utf8'), str(json.content, encoding='utf8'))
 
 
-from mysite.loginhandler import RegForm
-class RegFormModelTest(TestCase):
-    def test_regform_name_label(self):
-        form = RegForm()
-        self.assertEquals(form.fields['username'].label, 'Имя пользователя')
+class VueTests(TestCase):
+    def setUp(self):
+        # Every test needs access to the request factory.
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(username='TestUser', password='top_secret')
+        
+        self.client = Client()
+

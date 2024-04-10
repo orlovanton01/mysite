@@ -2,7 +2,7 @@
   import { ref,onMounted,watch} from "vue"
   import {Course} from "@/api.js"
   import { useRecaptchaProvider } from 'vue-recaptcha'
-  import { useChallengeV2, useChallengeV3 } from 'vue-recaptcha'
+  import { useChallengeV3 } from 'vue-recaptcha'
 
   const ordering = ref('')
   const order = ref('')
@@ -18,30 +18,33 @@
   const human = ref(false)
 
   async function getData(){
-    let filter
-    if (order.value=='По возрастанию')
-      filter ={ordering: ordering.value}
-    else
-      filter ={ordering: '-'+ordering.value}
-    if (search.value)
-      filter.search=search.value
-    if (min_price.value)
-      filter.min_price=min_price.value
-    if (max_price.value)
-      filter.max_price=max_price.value
-    if (min_training_period.value)
-      filter.min_training_period=min_training_period.value
-    if (max_training_period.value)
-      filter.max_training_period=max_training_period.value
-    data.value  = await Course.objects.filter(filter)
-    // console.log(await Course.objects.filter(filter))
-    // console.log(data.value)
+    if (human.value == true){
+      let filter
+      if (order.value=='По возрастанию')
+        filter ={ordering: ordering.value}
+      else
+        filter ={ordering: '-'+ordering.value}
+      if (search.value)
+        filter.search=search.value
+      if (min_price.value)
+        filter.min_price=min_price.value
+      if (max_price.value)
+        filter.max_price=max_price.value
+      if (min_training_period.value)
+        filter.min_training_period=min_training_period.value
+      if (max_training_period.value)
+        filter.max_training_period=max_training_period.value
+      data.value  = await Course.objects.filter(filter)
+      // console.log(await Course.objects.filter(filter))
+      // console.log(data.value)
+    }
+    
   }
 
   onMounted(()=>{
-    // onSubmit(),
-    ShowStar(),
-    getData()
+    onSubmit()
+    // ShowStar(),
+    // getData()
   })
   watch(()=>search.value,()=>getData())
   watch(()=>ordering.value,()=>getData())
@@ -64,63 +67,48 @@
 
   import axios from "axios"
   async function AddFav(info){
-    await axios.get("/session/")
-    .then(result=>{
-      if (result.data.isAuthenticated){
-        console.log("Авторизован, загружаю курсы")
-        axios.get("/whoami/")
-        .then((result)=>{
-          console.log("Получен username")
-          axios.post("/api/favourite/", {
-            "user" : result.data.id,
-            "course" : info.id,
+    if (human.value == true) {
+      await axios.get("/session/")
+      .then(result=>{
+        if (result.data.isAuthenticated){
+          console.log("Авторизован, загружаю курсы")
+          axios.get("/whoami/")
+          .then((result)=>{
+            console.log("Получен username")
+            axios.post("/api/favourite/", {
+              "user" : result.data.id,
+              "course" : info.id,
+            })
           })
-        })
-      }
-      else {
-        console.log("Нужно войти")
-      }
-    })
-    .catch(error=>{
-      console.log("Ошибка при выполнении запроса")
-    })
+        }
+        else {
+          console.log("Нужно войти")
+        }
+      })
+      .catch(error=>{
+        console.log("Ошибка при выполнении запроса")
+      })
+    }
+    
   }
 
   async function ShowStar(){
-    await axios.get("/session/")
-    .then(result=>{
-      auth.value = result.data.isAuthenticated
-    })
-    .catch(error=>{
-      console.log("Ошибка при выполнении запроса")
-      auth.value = false
-    })
+    if (human.value == true){
+      await axios.get("/session/")
+      .then(result=>{
+        auth.value = result.data.isAuthenticated
+      })
+      .catch(error=>{
+        console.log("Ошибка при выполнении запроса")
+        auth.value = false
+      })
+    } 
   }
 
 
   
   
   useRecaptchaProvider()
-  const { root, onVerify } = useChallengeV2({
-    options: {
-      theme: 'light',
-      size: 'normal',
-    }
-  })
-
-  onVerify((response) => {
-    // do something with response
-    axios.post('/api/verify-captcha/',{
-      "token": response,
-      "version" : "V2",
-    })
-    .then(result => {
-      human.value = result.data.is_human
-    })
-  })
-
-
-
   const { execute } = useChallengeV3('submit')
 
   async function onSubmit() {
@@ -134,21 +122,20 @@
     .then(result => {
       console.log(result.data.is_human)
       human.value = result.data.is_human
+      getData()
+      ShowStar()
     })
   }
 
 </script>
 
 <template>
-    <div v-if="(human == false) & (auth == false)" class="row row-cols-2">
-      <div class="col">
-        <button @click="onSubmit" class="btn btn-outline-danger">
-          Если вы видите это сообщение то вы скорее всего не прошли проверку ReCaptcha.
-          Для получения списка курсов нужно убедиться что вы человек.
-          Пройдите капчу нажав на данное сообщение или капчу справа.
-        </button>
-      </div>
-      <div class="col" ref="root" />
+    <div v-if="human == false" class="row row-cols-2">
+      <button @click="onSubmit" class="btn btn-outline-danger">
+        Если вы видите это сообщение то вы скорее всего не прошли проверку ReCaptcha.
+        Для получения списка курсов нужно убедиться что вы человек.
+        Пройдите капчу нажав на данное сообщение.
+      </button>
     </div>
     <div class="row" v-else>
       <form class="col-3">
