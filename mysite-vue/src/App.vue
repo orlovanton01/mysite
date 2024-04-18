@@ -1,21 +1,19 @@
 <script setup>
-import axios from "axios"
   import { ref,onMounted} from "vue"
-
-  const data =ref([])
-  let username = ref('') 
-
-
-  onMounted(()=> Req())
+  import axios from "axios"
   
-  async function Req() {
+  const data =ref([])
+  let username = ref('Гость') 
+
+  
+  onMounted(()=>Req())
+
+  
+  async function Req(){
     await axios.get("/session/")
     .then(result=>{
       if (result.data.isAuthenticated){
-        axios.get("/whoami/")
-        .then((result)=>{
-          username.value = result.data.username
-        })
+        username.value = result.data.username
       }
       else {
         username.value = "Гость"
@@ -28,8 +26,7 @@ import axios from "axios"
   }
 
   async function Logout(){
-    axios.post("/logout/", {
-    },)
+    axios.post("/logout/")
     .then(response=>{
       window.location.replace('/')
     })
@@ -52,36 +49,29 @@ import axios from "axios"
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/">Главная</a>
             </li>
-            <!-- <li class="nav-item dropdown" v-if="username == 'Гость'">
-              <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Войти
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/login">Вход</a></li>
-                <li><a class="dropdown-item" href="#">Регистрация</a></li>
-              </ul>
-            </li>
-            <li class="nav-item" v-else><a class="nav-link active" href="" @click="Logout">Выйти</a></li> -->
+           
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Сравнение</a>
             </li>
+            
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/favourites">Избранное</a>
             </li>
           </ul>
-          <div class="d-flex">
+          <div class="d-flex" id="username">
             Вы авторизованы как: {{ username }}
           </div>
           <ul class="navbar-nav">
-            <li class="nav-item fst-italic fw-bold" v-if="username == 'Гость'"><a class="nav-link active" href="/login">Вход</a></li>
-            <li class="nav-item fst-italic fw-bold" v-if="username == 'Гость'"><a class="nav-link active" href="/register">Регистрация</a></li>
-            <li class="nav-item fst-italic fw-bold" v-else><a class="nav-link active" href="" @click="Logout">Выйти</a></li>
+            <li class="nav-item fst-italic fw-bold" v-if="username == 'Гость'"><a class="nav-link active" id="login" href="/login">Вход</a></li>
+            <li class="nav-item fst-italic fw-bold" v-if="username == 'Гость'"><a class="nav-link active" id="register" href="/register">Регистрация</a></li>
+            <li class="nav-item fst-italic fw-bold" v-else><a class="nav-link active" href="" id="logout" @click="Logout()">Выйти</a></li>
           </ul>
         </div>
       </div>
     </nav>
     <div class="container" id="main">
       <RouterView />
+      <!-- <router-view></router-view> -->
   </div>
 </template>
 

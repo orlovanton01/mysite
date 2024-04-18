@@ -69,21 +69,10 @@ def register_view(request):
             return JsonResponse({'detail': f'Created user {user.username}', 'errors' : ""})
     return JsonResponse({'detail': 'Form is NOT valid', 'errors': [value for value in form.errors.values()][0]},status=400)
 
-    
-    
-
-
 
 @ensure_csrf_cookie
 def session_view(request):
     if not request.user.is_authenticated:
         return JsonResponse({'isAuthenticated': False})
 
-    return JsonResponse({'isAuthenticated': True})
-
-
-def whoami_view(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'isAuthenticated': False})
-
-    return JsonResponse({'username': request.user.username, 'id': request.user.id})
+    return JsonResponse({'isAuthenticated': True, 'username': request.user.username, 'id': request.user.id})

@@ -42,7 +42,6 @@ urlpatterns = [
     path('registeruser/', lh.register_view, name='api-register'),
     path('logout/', lh.logout_view, name='api-logout'),
     path('session/', lh.session_view, name='api-session'),
-    path('whoami/', lh.whoami_view, name='api-whoami'),
     path('api/verify-captcha/', ch.VerifyCaptcha.as_view(), name='verify-captcha'),
 ]
 

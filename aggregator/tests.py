@@ -75,25 +75,7 @@ class RequestTests(TestCase):
         request.user = self.user
         response = lh.session_view(request)
 
-        json = JsonResponse({'isAuthenticated': True})
-        self.assertJSONEqual(str(response.content, encoding='utf8'), str(json.content, encoding='utf8'))
-    
-    def test_guest_whoami(self):
-        # Create an instance of a GET request.
-        request = self.factory.get('/whoami/')
-        request.user = AnonymousUser()
-        response = lh.whoami_view(request)
-
-        json = JsonResponse({'isAuthenticated': False})
-        self.assertJSONEqual(str(response.content, encoding='utf8'), str(json.content, encoding='utf8'))
-
-    def test_user_whoami(self):
-        # Create an instance of a GET request.
-        request = self.factory.get('/whoami/')
-        request.user = self.user
-        response = lh.whoami_view(request)
-
-        json = JsonResponse({'username': 'TestUser', 'id' : 1})
+        json = JsonResponse({'isAuthenticated': True, 'id': 1, 'username': 'TestUser'})
         self.assertJSONEqual(str(response.content, encoding='utf8'), str(json.content, encoding='utf8'))
 
     def test_guest_logout(self):
@@ -155,12 +137,4 @@ class RequestTests(TestCase):
         json = JsonResponse({'detail': 'Invalid credentials.'})
         self.assertJSONEqual(str(response.content, encoding='utf8'), str(json.content, encoding='utf8'))
 
-
-class VueTests(TestCase):
-    def setUp(self):
-        # Every test needs access to the request factory.
-        self.factory = RequestFactory()
-        self.user = User.objects.create_user(username='TestUser', password='top_secret')
-        
-        self.client = Client()
 

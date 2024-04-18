@@ -12,11 +12,6 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue')
-    },
-    {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue'),
@@ -39,14 +34,6 @@ const router = createRouter({
       beforeEnter: (to, from, next) => {
         DisableGuestEntry(to,from,next)
       },
-    },
-    {
-      path: '/needauth',
-      name: 'needauth',
-      component: () => import('../views/NeedAuthView.vue'),
-      beforeEnter: (to, from, next) => {
-        DisableUserEntry(to, from, next)
-      },
     }
   ]
 })
@@ -62,8 +49,8 @@ const DisableGuestEntry = function(to, from, next) {
       next()
     }
     else {
-      // Перенаправляем на страницу ошибки
-      next('needauth')
+      // Перенаправляем на страницу входа
+      next('login')
     }
   })
   .catch(error=>{
