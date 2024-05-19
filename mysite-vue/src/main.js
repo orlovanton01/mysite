@@ -34,3 +34,5 @@ app.use(VueRecaptchaPlugin, {
 })
 
 app.mount('#app')
+
+document.title = 'Агрегатор курсов'
