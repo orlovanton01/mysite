@@ -5,5 +5,5 @@
 ![image](https://github.com/orlovanton01/mysite/assets/82258323/02cd4f6e-ee1e-4201-9d4f-204924fe4800)  
 Сами ключи можно получить на сайте https://www.google.com/recaptcha/admin/create  
 В поле ярлык можете ввести всё что угодно (например, example.com)  
-Вполе домены добавьте 2 домена: 127.0.0.1 и localhost  
+В поле домены добавьте 2 домена: 127.0.0.1 и localhost  
 Также нужно выполнить команду npm install @unhead/vue
