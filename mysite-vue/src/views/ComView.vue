@@ -1,7 +1,7 @@
 <script setup>
   import axios from "axios"
   import { ref,onMounted} from "vue"
-  import {Fav} from "@/api.js"
+  import {Com} from "@/api.js"
   import { useRecaptchaProvider } from 'vue-recaptcha'
   import { useChallengeV3 } from 'vue-recaptcha'
 
@@ -35,19 +35,19 @@
   async function getData(){
       // console.log("PreFilter")
       if (human.value == true){
-        data.value = await Fav.objects.filter({user: userid.value})
+        data.value = await Com.objects.filter({user: userid.value})
       }
       // console.log(data.value)
     }
 
-  async function DelFav(info){
+  async function DelCom(info){
     if (human.value == true){
       await axios.get("/session/")
       .then(result=>{
         if (result.data.isAuthenticated){
           console.log("Получен username")
 
-          axios.delete(`/api/favourite/${info.id}/`)
+          axios.delete(`/api/comparison/${info.id}/`)
           .then(()=>getData())
           console.log("Подчистил")
         }
@@ -82,30 +82,53 @@
   <!-- <div v-if="human == true, username!=''"> -->
   <div v-else>
     <strong>Если вы видите эту страницу, то вы авторизованы</strong>
-    <h3>Избранное пользователя {{ username }}</h3>
+    <h3>Сравнения пользователя {{ username }}</h3>
 
     <div class="row" >
         <div class="col-12">
-          <div class="row row-cols-1 row-cols-md-4 g-4">
-              <div class="col" v-for="info in data">
-                <div class="card h-100" style="width: 18rem; ">
-                  <img :src="info.course.get_course_img_url" class="card-img-top" alt="Логотип школы">
-                  <div class="card-body">
-                    <h5 class="card-title">{{info.course.course_name}}<br></h5>
-                    <h5 class="card-title">{{info.course.price}} ₽<br></h5>
-                    <p class="card-text">{{info.course.training_period}} мес.</p>
-                    <a :href='info.course.link' class="btn btn-primary">Перейти на сайт</a>
-                    <a class="btn btn-outline-danger" @click="DelFav(info)">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Название курса</th>
+                    <th scope="col">Платформа</th>
+                    <th scope="col">Цена, ₽</th>
+                    <th scope="col">Время обучения, мес.</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="info in data">
+                    <th scope="row"><a :href='info.course.link' class="link">{{info.course.course_name}}</a></th>
+                    <td><img :src="info.course.get_course_img_url" class="card-img-top" alt="Логотип школы"></td>
+                    <td>{{info.course.price}}</td>
+                    <td>{{info.course.training_period}}</td>
+                    <td>
+                        <a class="btn btn-outline-danger" @click="DelCom(info)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+    .card-img-top{
+        width: 40%;
+        height: 40%;
+    }
+    .link{
+        text-decoration: none;
+        color: black;
+    }
+    .th, .td, .tr{
+        text-align: center;
+        vertical-align: center;
+    }
+</style>

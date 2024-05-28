@@ -51,7 +51,7 @@
             </li>
            
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Сравнение</a>
+              <a class="nav-link active" aria-current="page" href="/comparisons">Сравнение</a>
             </li>
             
             <li class="nav-item">

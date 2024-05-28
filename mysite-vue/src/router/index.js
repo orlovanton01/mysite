@@ -34,6 +34,14 @@ const router = createRouter({
       beforeEnter: (to, from, next) => {
         DisableGuestEntry(to,from,next)
       },
+    },
+    {
+      path: '/comparisons',
+      name: 'comparisons',
+      component: () => import('../views/ComView.vue'),
+      beforeEnter: (to, from, next) => {
+        DisableGuestEntry(to,from,next)
+      },
     }
   ]
 })

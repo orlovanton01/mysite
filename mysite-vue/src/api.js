@@ -102,3 +102,7 @@ export let Course = apiConstructor(courseUrl)
 const favUrl="/api/favourite/"
 
 export let Fav = apiConstructor(favUrl)
+
+const comUrl="/api/comparison/"
+
+export let Com = apiConstructor(comUrl)

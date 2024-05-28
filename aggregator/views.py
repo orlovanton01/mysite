@@ -5,7 +5,7 @@ from django_filters import rest_framework as filters
 from rest_framework.filters import OrderingFilter
 
 from django.contrib.auth.models import User
-from .models import Course, Favorite #, Profile
+from .models import Course, Favorite, Сomparison #, Profile
 import csv
 
 from rest_framework import serializers    
@@ -78,4 +78,42 @@ class FavViewSet(viewsets.ModelViewSet):
             return FavSerializer
         else:
             return FavSerializerPost
+        
+
+
+class ComSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+    course = CourseSerializer()
+    class Meta:
+        model = Сomparison
+        fields = "__all__"
+    
+class ComSerializerPost(WritableNestedModelSerializer, serializers.ModelSerializer):
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
+    user= serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    class Meta:
+        model = Сomparison
+        fields = "__all__"
+
+    def create(self, validated_data):
+        instance, _ = Сomparison.objects.get_or_create(**validated_data)
+        return instance
+
+class ComFilter(django_filters.FilterSet):
+    class Meta:
+        model = Сomparison
+        fields = ['user']
+
+class ComViewSet(viewsets.ModelViewSet):
+    queryset = Сomparison.objects.all()
+    serializer_class = ComSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ComFilter
+    ordering_fields = '__all__'
+
+    def get_serializer_class(self):
+        print(self.request.method)
+        if self.request.method == "GET":
+            return ComSerializer
+        else:
+            return ComSerializerPost
         
