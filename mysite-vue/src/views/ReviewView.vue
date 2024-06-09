@@ -12,8 +12,9 @@
   const human = ref(false)
 
   defineProps<{
-    title?: string,
     user?: string
+    name?: string
+    id?: string
   }>()
 
   const emit = defineEmits<{
@@ -72,12 +73,12 @@
     <div id="guestMessage" v-else-if="username==''"><h3>Вы не авторизованы</h3></div>
     <!-- <div v-if="human == true, username!=''"> -->
     <div v-else>
-        <h1>{{ title }}</h1>
-        <h2>Пользователь {{ username }}</h2>
-        <h2>Атрибутный пользователь [{{ user }}]</h2>
+        Вы авторизованы как {{ user }}
+        <h1>Отзывы к курсу "{{ name }}"</h1>
+        <i>Идентификатор курса - {{ id }}</i>
         <slot /> 
 
-        
+        <br>
         <button @click="emit('confirm')">
             Confirm
         </button> 

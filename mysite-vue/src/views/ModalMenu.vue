@@ -1,58 +1,3 @@
-<!-- <script setup>
-import { ModalsContainer, useModal } from 'vue-final-modal'
-import ModalConfirmPlainCss from '@/views/Test.vue'
-
-const { open, close } = useModal({
-  component: ModalConfirmPlainCss,
-  attrs: {
-    title: 'Hello World!',
-    onConfirm() {
-      close()
-    },
-  },
-  slots: {
-    default: '<p>The content of the modal</p>',
-  },
-})
-</script>
-
-<template>
-  <Button @click="open">
-    Open Modal
-  </Button>
-
-  <ModalsContainer />
-</template> -->
-
-
-<!-- ///////////////// -->
-
-<!-- <script setup>
-import { ref,onMounted} from "vue"
-const show = ref(false)
-
-function confirm() {
-  show.value = false
-}
-</script>
-
-<template>
-  <button @click="show = true">
-    Open Modal
-  </button>
-
-  <ModalConfirm
-    v-model="show"
-    title="Hello World!"
-    @confirm="() => confirm()"
-  >
-    <p>VModel: The content of the modal</p>
-  </ModalConfirm>
-</template> -->
-
-<!-- ///////////////// -->
-
-
 <script setup lang="ts">
 import { ModalsContainer, useModal } from 'vue-final-modal'
 import ModalConfirm from '@/views/Test.vue'
@@ -68,14 +13,13 @@ import { ref,onMounted} from "vue"
   let userid = ref('')
   const human = ref(false)
 
-const { open, close } = useModal({
+const { open, close, patchOptions } = useModal({
   component: ModalConfirm,
   attrs: {
     title: 'Hello World!',
     onConfirm() {
       close()
     },
-    user: username.value,
   },
   slots: {
     default: '<p>UseModal: The content of the modal</p> <h1>Hmmm?</h1>',
@@ -109,6 +53,12 @@ const { open, close } = useModal({
         if (result.data.isAuthenticated){
           username.value = result.data.username
           userid.value = result.data.id
+          patchOptions({
+            attrs: {
+              // Overwrite the modal's props
+              user : username.value
+            }
+          })
         }
         else {
           username.value = ""
