@@ -18,11 +18,14 @@ import "bootstrap"
 import {YOUR_V2_SITEKEY_HERE, YOUR_V3_SITEKEY_HERE} from './config'
 import { createHead } from '@unhead/vue'
 import { VueRecaptchaPlugin } from 'vue-recaptcha'
+import 'vue-final-modal/style.css'
 
-
+import { createVfm } from 'vue-final-modal'
 
 
 const app = createApp(App)
+
+const vfm = createVfm()
 
 // app.use(createPinia())
 app.use(router)
@@ -32,7 +35,7 @@ app.use(VueRecaptchaPlugin, {
     v2SiteKey: YOUR_V2_SITEKEY_HERE,
     v3SiteKey: YOUR_V3_SITEKEY_HERE,
 })
-
-app.mount('#app')
+app.use(vfm).mount('#app')
+// app.mount('#app')
 
 document.title = 'Агрегатор курсов'
