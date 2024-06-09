@@ -20,7 +20,7 @@ from aggregator import views
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
-from aggregator.views import CourseViewSet, FavViewSet, ComViewSet
+from aggregator.views import CourseViewSet, FavViewSet, ComViewSet, RevViewSet
 from rest_framework.authtoken import views
 from . import loginhandler as lh
 from . import captchahandler as ch
@@ -30,6 +30,8 @@ router = routers.DefaultRouter()
 router.register(r'comparison', ComViewSet)
 router.register(r'course', CourseViewSet)
 router.register(r'favourite', FavViewSet)
+router.register(r'review', RevViewSet)
+
 
 # Это эндпоинты. К ним делаем запросы на порте 8000
 urlpatterns = [

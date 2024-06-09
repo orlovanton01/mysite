@@ -106,3 +106,7 @@ export let Fav = apiConstructor(favUrl)
 const comUrl="/api/comparison/"
 
 export let Com = apiConstructor(comUrl)
+
+const revUrl="/api/review/"
+
+export let Rev = apiConstructor(revUrl)

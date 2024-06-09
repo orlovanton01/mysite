@@ -2,7 +2,7 @@
   import { VueFinalModal } from 'vue-final-modal'
   import { ref,onMounted} from "vue"
   import axios from "axios"
-  import {Fav} from "@/api.js"
+  import {Rev} from "@/api.js"
   import { useRecaptchaProvider } from 'vue-recaptcha'
   import { useChallengeV3 } from 'vue-recaptcha'
   
@@ -10,8 +10,9 @@
   let username = ref('') 
   let userid = ref('')
   const human = ref(false)
+  const input = ref('')
 
-  defineProps<{
+  const props=defineProps<{
     user?: string
     name?: string
     id?: string
@@ -45,6 +46,7 @@
         if (result.data.isAuthenticated){
           username.value = result.data.username
           userid.value = result.data.id
+          getData()
         }
         else {
           username.value = ""
@@ -56,6 +58,14 @@
       })
     }
   }
+
+  async function getData(){
+      // console.log("PreFilter")
+      if (human.value == true){
+        data.value = await Rev.objects.filter({id: props.id})
+      }
+      // console.log(data.value)
+    }
 
   useRecaptchaProvider()
   const { execute } = useChallengeV3('submit')
@@ -70,19 +80,43 @@
       content-transition="vfm-fade"
     >
     <div id="botMessage" v-if="human==false"><h3>Проверяем reCaptcha...</h3></div>
-    <div id="guestMessage" v-else-if="username==''"><h3>Вы не авторизованы</h3></div>
     <!-- <div v-if="human == true, username!=''"> -->
+    <div id="guestMessage" v-else-if="username==''"><h3>Вы не авторизованы</h3></div>
     <div v-else>
-        Вы авторизованы как {{ user }}
-        <h1>Отзывы к курсу "{{ name }}"</h1>
-        <i>Идентификатор курса - {{ id }}</i>
-        <slot /> 
-
-        <br>
-        <button @click="emit('confirm')">
-            Confirm
-        </button> 
+    <h3>Вы авторизованы как {{ user }}</h3>
     </div>
+    <h1>Отзывы к курсу "{{ name }}"</h1>
+    <i>Идентификатор курса - {{ id }}</i>
+    <div v-for="review in data">
+      <table class="table table-borderless border-top border-bottom">
+        <thead>
+          <tr>
+            <th scope="col" id="user">{{ review.user }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="2"> {{ review.text_review }}</td>
+          </tr>
+          <tr>
+            <td scope="col"><a class="link">Изменить</a></td>
+            <td scope="col"><a class="link">Удалить</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="input-group">
+      <textarea class="form-control" aria-label="With textarea" v-model="input"></textarea>
+    </div>
+        <!-- <slot />  -->
+         <div>
+            <a class="btn btn-success">Отправить</a>
+          <a @click="emit('confirm')" class="btn btn-danger">
+              Закрыть
+          </a> 
+         </div>
+
       
     </VueFinalModal>
   </template>
@@ -115,4 +149,11 @@
   .dark .confirm-modal-content {
     background: #000;
   }
+  #user{
+    font-size: 15px;
+  }
+   .link{
+    text-decoration: none;
+    font-size: 12px;
+   }
   </style>
