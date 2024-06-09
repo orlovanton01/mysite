@@ -2,7 +2,7 @@
   import { VueFinalModal } from 'vue-final-modal'
   import { ref,onMounted} from "vue"
   import axios from "axios"
-  import {Rev} from "@/api.js"
+  import {Rev, Course} from "@/api.js"
   import { useRecaptchaProvider } from 'vue-recaptcha'
   import { useChallengeV3 } from 'vue-recaptcha'
   
@@ -14,8 +14,7 @@
 
   const props=defineProps<{
     user?: string
-    name?: string
-    id?: string
+    course?: typeof Course
   }>()
 
   const emit = defineEmits<{
@@ -60,9 +59,9 @@
   }
 
   async function getData(){
-      // console.log("PreFilter")
+      // console.log(props.course)
       if (human.value == true){
-        data.value = await Rev.objects.filter({id: props.id})
+        data.value = await Rev.objects.filter({course : props.course})
       }
       // console.log(data.value)
     }
@@ -85,8 +84,8 @@
     <div v-else>
     <h3>Вы авторизованы как {{ user }}</h3>
     </div>
-    <h1>Отзывы к курсу "{{ name }}"</h1>
-    <i>Идентификатор курса - {{ id }}</i>
+    <h1>Отзывы к курсу "{{ course.course_name }}"</h1>
+    <i>Идентификатор курса - {{ course.id }}</i>
     <div v-for="review in data">
       <table class="table table-borderless border-top border-bottom">
         <thead>

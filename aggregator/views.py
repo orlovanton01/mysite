@@ -137,7 +137,7 @@ class RevSerializerPost(WritableNestedModelSerializer, serializers.ModelSerializ
 class RevFilter(django_filters.FilterSet):
     class Meta:
         model = Review
-        fields = ['user']
+        fields = ['user', 'course']
 
 class RevViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()

@@ -173,8 +173,7 @@
           attrs: {
             // Overwrite the modal's props
             user : result.data.username,
-            name : course.course_name,
-            id : course.id
+            course: course,
           }
       })
       open()
