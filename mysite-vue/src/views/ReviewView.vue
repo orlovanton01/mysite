@@ -86,25 +86,20 @@
     </div>
     <h1>Отзывы к курсу "{{ course.course_name }}"</h1>
     <i>Идентификатор курса - {{ course.id }}</i>
-    <div v-for="review in data">
-      <table class="table table-borderless border-top border-bottom">
-        <thead>
-          <tr>
-            <th scope="col" id="user">{{ review.user }}</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="2"> {{ review.text_review }}</td>
-          </tr>
-          <tr>
-            <td scope="col"><a class="link">Изменить</a></td>
-            <td scope="col"><a class="link">Удалить</a></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <table class="table">
+      <tbody>
+        <tr v-for="review in data">
+          <td>
+            <div id="user"><b>{{ review.user }}</b></div>
+            <div> {{ review.text_review }}</div>
+            <div>
+              <a class="link" id="first">Изменить</a>
+              <a class="link" id="second">Удалить</a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <div class="input-group">
       <textarea class="form-control" aria-label="With textarea" v-model="input"></textarea>
     </div>
@@ -154,5 +149,11 @@
    .link{
     text-decoration: none;
     font-size: 12px;
+   }
+   #first{
+    padding-right: 5px;
+   }
+   #second{
+    padding-left: 5px;
    }
   </style>
