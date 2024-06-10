@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from rest_framework import routers, serializers, viewsets
 import django_filters
 from django_filters import rest_framework as filters
-from rest_framework.filters import OrderingFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from django.contrib.auth.models import User
 from .models import Course, Favorite, Сomparison, Review #, Profile
@@ -13,7 +13,8 @@ from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 
 class CourseFilter(django_filters.FilterSet):
-    search = filters.CharFilter(field_name="course_name", lookup_expr="icontains")
+    #search = filters.CharFilter(field_name="course_name", lookup_expr="contains")
+    search = SearchFilter()
     min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
     max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
     min_training_period = filters.NumberFilter(field_name="training_period", lookup_expr='gte')
@@ -33,8 +34,9 @@ class CourseSerializer(serializers.ModelSerializer):
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    filter_backends = (OrderingFilter, filters.DjangoFilterBackend,)
+    filter_backends = (OrderingFilter, filters.DjangoFilterBackend, SearchFilter,)
     ordering_fields = '__all__'
+    search_fields = ["course_name"]
     filterset_class = CourseFilter
 
 def index(request):
