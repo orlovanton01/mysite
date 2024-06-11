@@ -90,7 +90,7 @@
       <tbody>
         <tr v-for="review in data">
           <td>
-            <div id="user"><b>{{ review.user }}</b></div>
+            <div id="user"><b>{{ review.author }}</b></div>
             <div> {{ review.text_review }}</div>
             <div>
               <a class="link" id="first">Изменить</a>

@@ -120,10 +120,11 @@ class ComViewSet(viewsets.ModelViewSet):
         
 
 class RevSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+    author = serializers.CharField(source='user.username', read_only=True)
     course = CourseSerializer()
     class Meta:
         model = Review
-        fields = "__all__"
+        fields = ['id', 'course', 'text_review', 'user', 'author',]
     
 class RevSerializerPost(WritableNestedModelSerializer, serializers.ModelSerializer):
     course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
