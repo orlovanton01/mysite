@@ -42,10 +42,10 @@
       await axios.get("/session/")
       .then(result=>{
         console.log(result.data)
+        getData()
         if (result.data.isAuthenticated){
           username.value = result.data.username
           userid.value = result.data.id
-          getData()
         }
         else {
           username.value = ""
@@ -54,6 +54,51 @@
       .catch(error=>{
         console.log("Ошибка при выполнении запроса")
         username.value = error.data.response
+      })
+    }
+  }
+
+  async function AddRev(info){
+    if (human.value == true) {
+      await axios.get("/session/")
+      .then(result=>{
+        if (result.data.isAuthenticated){
+          console.log("Авторизован, загружаю курсы")
+          console.log("Получен username")
+          axios.post("/api/review/", {
+            "user" : result.data.id,
+            "course" : props.course.id,
+            "text_review": info
+          })
+          .then(()=>getData())
+          console.log("Запостил")
+        }
+        else {
+          console.log("Нужно войти")
+          alert('Для отправки отзывов необходимо войти')
+        }
+      })
+      .catch(error=>{
+        console.log("Ошибка при выполнении запроса")
+      })
+    }
+    
+  }
+
+  async function DelRev(info){
+    if (human.value == true){
+      await axios.get("/session/")
+      .then(result=>{
+        if (result.data.isAuthenticated){
+          console.log("Получен username")
+
+          axios.delete(`/api/review/${info.id}/`)
+          .then(()=>getData())
+          console.log("Подчистил")
+        }
+      })
+      .catch(error=>{
+        console.log("Ошибка при выполнении запроса")
       })
     }
   }
@@ -80,7 +125,9 @@
     >
     <div id="botMessage" v-if="human==false"><h3>Проверяем reCaptcha...</h3></div>
     <!-- <div v-if="human == true, username!=''"> -->
-    <div id="guestMessage" v-else-if="username==''"><h3>Вы не авторизованы</h3></div>
+    <div id="guestMessage" v-else-if="username==''">
+      <h3>Вы не авторизованы</h3>
+    </div>
     <div v-else>
     <h3>Вы авторизованы как {{ user }}</h3>
     </div>
@@ -92,9 +139,9 @@
           <td>
             <div id="user"><b>{{ review.author }}</b></div>
             <div> {{ review.text_review }}</div>
-            <div>
-              <a class="link" id="first">Изменить</a>
-              <a class="link" id="second">Удалить</a>
+            <div v-if="username==review.author">
+              <a type="submit" class="link" id="first">Изменить</a>
+              <a type="submit" class="link" id="second" @click="DelRev(review)">Удалить</a>
             </div>
           </td>
         </tr>
@@ -103,9 +150,9 @@
     <div class="input-group">
       <textarea class="form-control" aria-label="With textarea" v-model="input"></textarea>
     </div>
-        <!-- <slot />  -->
+        <slot /> 
          <div>
-            <a class="btn btn-success">Отправить</a>
+            <a @click="AddRev(input)" class="btn btn-success">Отправить</a>
           <a @click="emit('confirm')" class="btn btn-danger">
               Закрыть
           </a> 
