@@ -132,7 +132,7 @@
     <h3>Вы авторизованы как {{ user }}</h3>
     </div>
     <h1>Отзывы к курсу "{{ course.course_name }}"</h1>
-    <i>Идентификатор курса - {{ course.id }}</i>
+    <!-- <i>Идентификатор курса - {{ course.id }}</i> -->
     <table class="table">
       <tbody>
         <tr v-for="review in data">
@@ -140,7 +140,7 @@
             <div id="user"><b>{{ review.author }}</b></div>
             <div> {{ review.text_review }}</div>
             <div v-if="username==review.author">
-              <a type="submit" class="link" id="first">Изменить</a>
+              <!-- <a type="submit" class="link" id="first">Изменить</a> -->
               <a type="submit" class="link" id="second" @click="DelRev(review)">Удалить</a>
             </div>
           </td>
@@ -200,7 +200,7 @@
    #first{
     padding-right: 5px;
    }
-   #second{
+   /* #second{
     padding-left: 5px;
-   }
+   } */
   </style>
