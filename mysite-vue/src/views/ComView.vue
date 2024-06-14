@@ -169,7 +169,7 @@
         vertical-align: center;
     }
     .cont{
-        overflow: scroll;
+        overflow-x: scroll;
         position: relative;
     }
     .table{
