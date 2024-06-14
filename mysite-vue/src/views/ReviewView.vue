@@ -123,16 +123,18 @@
       overlay-transition="vfm-fade"
       content-transition="vfm-fade"
     >
-    <div id="botMessage" v-if="human==false"><h3>Проверяем reCaptcha...</h3></div>
-    <!-- <div v-if="human == true, username!=''"> -->
-    <div id="guestMessage" v-else-if="username==''">
-      <h3>Вы не авторизованы</h3>
-    </div>
-    <div v-else>
-    <h3>Вы авторизованы как {{ user }}</h3>
-    </div>
-    <h1>Отзывы к курсу "{{ course.course_name }}"</h1>
-    <!-- <i>Идентификатор курса - {{ course.id }}</i> -->
+    <div class="sticky-up">
+      <div id="botMessage" v-if="human==false"><h3>Проверяем reCaptcha...</h3></div>
+      <!-- <div v-if="human == true, username!=''"> -->
+      <div id="guestMessage" v-else-if="username==''">
+        <h3>Вы не авторизованы</h3>
+      </div>
+      <div v-else>
+      <h3>Вы авторизованы как {{ user }}</h3>
+      </div>
+      <h1>Отзывы к курсу "{{ course.course_name }}"</h1>
+      <!-- <i>Идентификатор курса - {{ course.id }}</i> -->
+  </div>
     <table class="table">
       <tbody>
         <tr v-for="review in data">
@@ -147,16 +149,19 @@
         </tr>
       </tbody>
     </table>
-    <div class="input-group">
-      <textarea class="form-control" aria-label="With textarea" v-model="input"></textarea>
+
+    <div class="sticky-down">
+      <div class="input-group">
+        <textarea class="form-control" aria-label="With textarea" v-model="input"></textarea>
+      </div>
+          <!-- <slot />  -->
+          <div>
+              <a @click="AddRev(input)" class="btn btn-success">Отправить</a>
+            <a @click="emit('confirm')" class="btn btn-danger">
+                Закрыть
+            </a> 
+          </div>
     </div>
-        <slot /> 
-         <div>
-            <a @click="AddRev(input)" class="btn btn-success">Отправить</a>
-          <a @click="emit('confirm')" class="btn btn-danger">
-              Закрыть
-          </a> 
-         </div>
 
       
     </VueFinalModal>
@@ -174,6 +179,8 @@
     padding: 1rem;
     background: #fff;
     border-radius: 0.5rem;
+    overflow-y: auto;
+    max-height: 80vh;
   }
   .confirm-modal-content > * + *{
     margin: 0.5rem 0;
@@ -203,4 +210,14 @@
    /* #second{
     padding-left: 5px;
    } */
+   .sticky-up{
+      position: sticky;
+      top: -14px;
+      background-color: white;
+    }
+    .sticky-down{
+      position: sticky;
+      bottom: -14px;
+      background-color: white;
+    }
   </style>
