@@ -1,4 +1,6 @@
 <script setup>
+  import { ModalsContainer } from 'vue-final-modal'
+
   import { ref,onMounted} from "vue"
   import axios from "axios"
   
@@ -71,6 +73,7 @@
     </nav>
     <div class="container" id="main">
       <RouterView />
+      <ModalsContainer />
       <!-- <router-view></router-view> -->
   </div>
 </template>

@@ -53,7 +53,7 @@ class Course(models.Model):
 
 class Review(models.Model):
     text_review=models.TextField(default='')
-    rating=models.DecimalField(decimal_places=1, max_digits=2, null=True, verbose_name='Рейтинг человека')
+    # rating=models.DecimalField(decimal_places=1, max_digits=2, null=True, verbose_name='Рейтинг человека')
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     course=models.ForeignKey(Course, on_delete=models.CASCADE)
 

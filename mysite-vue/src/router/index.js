@@ -42,6 +42,22 @@ const router = createRouter({
       beforeEnter: (to, from, next) => {
         DisableGuestEntry(to,from,next)
       },
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: () => import('../views/Test.vue'),
+      // beforeEnter: (to, from, next) => {
+      //   DisableGuestEntry(to,from,next)
+      // },
+    },
+    {
+      path: '/modalmenu',
+      name: 'modalmenu',
+      component: () => import('../views/ModalMenu.vue'),
+      // beforeEnter: (to, from, next) => {
+      //   DisableGuestEntry(to,from,next)
+      // },
     }
   ]
 })

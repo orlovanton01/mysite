@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "vue-body-scroll-lock": "^2.0.2"
+  }
+}

@@ -18,8 +18,10 @@
     "pinia": "^2.1.7",
     "sinon": "^17.0.1",
     "vue": "^3.4.21",
+    "vue-final-modal": "^4.5.4",
     "vue-recaptcha": "^3.0.0-alpha.6",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vuejs-confirm-dialog": "^0.5.1"
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.24.1",

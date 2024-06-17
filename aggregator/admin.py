@@ -3,7 +3,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Course, Review, Favorite, Сomparison #, Profile
+from .models import Course, Review, Favorite, Сomparison, Review #, Profile
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 

@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from rest_framework import routers, serializers, viewsets
 import django_filters
 from django_filters import rest_framework as filters
-from rest_framework.filters import OrderingFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from django.contrib.auth.models import User
-from .models import Course, Favorite, Сomparison #, Profile
+from .models import Course, Favorite, Сomparison, Review #, Profile
 import csv
 
 from rest_framework import serializers    
@@ -13,7 +13,8 @@ from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 
 class CourseFilter(django_filters.FilterSet):
-    search = filters.CharFilter(field_name="course_name", lookup_expr="icontains")
+    #search = filters.CharFilter(field_name="course_name", lookup_expr="contains")
+    search = SearchFilter()
     min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
     max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
     min_training_period = filters.NumberFilter(field_name="training_period", lookup_expr='gte')
@@ -33,8 +34,9 @@ class CourseSerializer(serializers.ModelSerializer):
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    filter_backends = (OrderingFilter, filters.DjangoFilterBackend,)
+    filter_backends = (OrderingFilter, filters.DjangoFilterBackend, SearchFilter,)
     ordering_fields = '__all__'
+    search_fields = ["course_name"]
     filterset_class = CourseFilter
 
 def index(request):
@@ -80,7 +82,6 @@ class FavViewSet(viewsets.ModelViewSet):
             return FavSerializerPost
         
 
-
 class ComSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     course = CourseSerializer()
     class Meta:
@@ -117,3 +118,40 @@ class ComViewSet(viewsets.ModelViewSet):
         else:
             return ComSerializerPost
         
+
+class RevSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+    author = serializers.CharField(source='user.username', read_only=True)
+    course = CourseSerializer()
+    class Meta:
+        model = Review
+        fields = ['id', 'course', 'text_review', 'user', 'author',]
+    
+class RevSerializerPost(WritableNestedModelSerializer, serializers.ModelSerializer):
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
+    user= serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    class Meta:
+        model = Review
+        fields = "__all__"
+
+    def create(self, validated_data):
+        instance, _ = Review.objects.get_or_create(**validated_data)
+        return instance
+
+class RevFilter(django_filters.FilterSet):
+    class Meta:
+        model = Review
+        fields = ['user', 'course']
+
+class RevViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = RevSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = RevFilter
+    ordering_fields = '__all__'
+
+    def get_serializer_class(self):
+        print(self.request.method)
+        if self.request.method == "GET":
+            return RevSerializer
+        else:
+            return RevSerializerPost
