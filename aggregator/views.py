@@ -11,10 +11,67 @@ import csv
 from rest_framework import serializers    
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 
+from django.db import migrations
+from django.contrib.postgres import operations
+from rest_fuzzysearch import search
+from django.contrib.postgres.search import TrigramSimilarity
+from django.db.models.functions import Greatest
+from rest_framework.settings import api_settings
+from django.utils.translation import gettext_lazy as _
+
+class TrigramSimilaritySearchFilter(SearchFilter):
+    search_param = api_settings.SEARCH_PARAM
+    template = 'rest_framework/filters/search.html'
+    search_title = _('Search')
+    search_description = _('A search term.')
+
+    def get_trigram_similarity(self, view, request):
+        return getattr(view, 'trigram_similarity', 0.3)
+
+    def get_search_terms(self, request):
+        """
+        Search terms are set by a ?search=... query parameter,
+        and may be comma and/or whitespace delimited.
+        """
+        params = request.query_params.get(self.search_param, '')
+        params = params.replace('\x00', '')  # strip null characters
+        params = params.replace(',', ' ')
+        return params.split()
+
+    def get_search_fields(self, view, request):
+        """
+        Search fields are obtained from the view, but the request is always
+        passed to this method. Sub-classes can override this method to
+        dynamically change the search fields based on request content.
+        """
+        return getattr(view, 'search_fields', None)
+
+    def filter_queryset(self, request, queryset, view):
+        trigram_similarity = self.get_trigram_similarity(view, request)
+        search_fields = self.get_search_fields(view, request)
+        search_terms = self.get_search_terms(request)
+
+        # if no search_terms return
+        if not search_terms:
+            return queryset
+
+        # make conditions
+        conditions = []
+        for search_term in search_terms:
+            conditions.extend([
+                TrigramSimilarity(field, search_term) for field in search_fields
+        ])
+
+        # take the greatest similarity from all conditions
+        # and annotate as similarity
+        return queryset.annotate(
+            similarity=Greatest(*conditions)
+        ).filter(similarity__gte=trigram_similarity)
+
 
 class CourseFilter(django_filters.FilterSet):
     #search = filters.CharFilter(field_name="course_name", lookup_expr="contains")
-    search = SearchFilter()
+    search = search.RankedFuzzySearchFilter()
     min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
     max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
     min_training_period = filters.NumberFilter(field_name="training_period", lookup_expr='gte')
@@ -23,6 +80,16 @@ class CourseFilter(django_filters.FilterSet):
         model = Course
         fields = '__all__'
         exclude ="owner_img"
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('api', '0001_initial'),
+    ]
+
+    operations = [
+        operations.TrigramExtension(),
+    ]
 
 class CourseSerializer(serializers.ModelSerializer):
     get_course_img_url = serializers.CharField(read_only=True)
@@ -34,7 +101,7 @@ class CourseSerializer(serializers.ModelSerializer):
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    filter_backends = (OrderingFilter, filters.DjangoFilterBackend, SearchFilter,)
+    filter_backends = (OrderingFilter, filters.DjangoFilterBackend, search.RankedFuzzySearchFilter,)
     ordering_fields = '__all__'
     search_fields = ["course_name"]
     filterset_class = CourseFilter
