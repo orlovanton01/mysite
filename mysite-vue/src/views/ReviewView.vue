@@ -132,7 +132,7 @@
       <div v-else>
       <h3>Вы авторизованы как {{ user }}</h3>
       </div>
-      <h1>Отзывы к курсу "{{ course.course_name }}"</h1>
+      <h1>Отзывы к курсу {{ course.course_name }}</h1>
       <!-- <i>Идентификатор курса - {{ course.id }}</i> -->
   </div>
     <table class="table">
